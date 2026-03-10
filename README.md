@@ -27,15 +27,22 @@ Your portfolio data is stored as a JSON file in a **GitHub Gist**.
 ### 2. The Engine
 
 - **Template System**: A lightweight regex-based engine handles rendering. It supports `{{variable}}`, `{{#each}}` for arrays, and `{{#if}}` for conditional logic.
-  - Template Syntax:
-  - ` {{#each arrayName}}`
-  - ` {{/each}}`
-  - ` {{#if variable}}`
-  - ` {{/if}}`
-  - ` {{variable}}`
-  - ` {{#array arrayName}}`
-  - ` {{value}}`
-  - ` {{/array}}`
+
+- **Template Syntax Example Detail**:
+
+  ```
+  {{#each arrayName}}
+     {{variable}}
+  {{/each}}
+
+  {{#if variable}}
+     {{variable}}
+  {{/if}}
+
+  {{variable}}
+
+  ```
+
 - **Routing**: Client-side routing via URL parameters (`?page=admin` or `?slug=project-name`) allows for clean navigation without a server.
 
 ### 3. Security (FanHash Engine)
@@ -71,6 +78,31 @@ To manage your Gist, the engine needs a GitHub Personal Access Token (PAT). Inst
 
 1. Upload these files to any static host (e.g., GitHub Pages).
 2. Navigate to your site URL.
+
+---
+
+## 🎨 Customization
+
+While PMSE is ready to use out of the box, you can customize several core paths in `index.js` to fit your repository structure. Look for the `// CAN BE CHANGED` comments:
+
+### 1. Base Path
+
+Update `BASE_PATH` if your portfolio is hosted in a sub-directory (common for GitHub Pages):
+
+```javascript
+const BASE_PATH = IS_LOCAL ? "./" : "/Your-Repo-Name/";
+```
+
+### 2. Template URLs
+
+If you want to rename or move your template files, update these constants:
+
+```javascript
+const TEMPLATE_URL = BASE_PATH + "list.template.html";
+const DETAIL_TEMPLATE_URL = BASE_PATH + "detail.template.html";
+const ADMIN_TEMPLATE_URL = BASE_PATH + "admin.template.html";
+const NOTFOUND_URL = BASE_PATH + "notfound.html";
+```
 
 ---
 

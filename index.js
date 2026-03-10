@@ -15,13 +15,13 @@
  */
 
 const IS_LOCAL = location.hostname === "localhost" || location.hostname === "127.0.0.1";
-const BASE_PATH = IS_LOCAL ? "./" : "/KumoD-Porfolio/"
+const BASE_PATH = IS_LOCAL ? "./" : "/KumoD-Porfolio/" // CAN BE CHANGED
 
 // templates
-const TEMPLATE_URL = BASE_PATH + "list.template.html"
-const DETAIL_TEMPLATE_URL = BASE_PATH + "detail.template.html"
-const ADMIN_TEMPLATE_URL = BASE_PATH + "admin.template.html"
-const NOTFOUND_URL = BASE_PATH + "notfound.html"
+const TEMPLATE_URL = BASE_PATH + "list.template.html" // CAN BE CHANGED
+const DETAIL_TEMPLATE_URL = BASE_PATH + "detail.template.html" // CAN BE CHANGED
+const ADMIN_TEMPLATE_URL = BASE_PATH + "admin.template.html" // CAN BE CHANGED
+const NOTFOUND_URL = BASE_PATH + "notfound.html" // CAN BE CHANGED
 
 // data
 const DATA_URL =
