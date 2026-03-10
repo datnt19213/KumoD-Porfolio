@@ -17,7 +17,7 @@
 const BASE_PATH = "/KumoD-Porfolio/"
 
 // templates
-const TEMPLATE_URL = BASE_PATH + "template.html"
+const TEMPLATE_URL = BASE_PATH + "list.template.html"
 const DETAIL_TEMPLATE_URL = BASE_PATH + "detail.template.html"
 const NOTFOUND_URL = BASE_PATH + "notfound.html"
 
