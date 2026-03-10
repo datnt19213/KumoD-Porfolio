@@ -27,6 +27,15 @@ Your portfolio data is stored as a JSON file in a **GitHub Gist**.
 ### 2. The Engine
 
 - **Template System**: A lightweight regex-based engine handles rendering. It supports `{{variable}}`, `{{#each}}` for arrays, and `{{#if}}` for conditional logic.
+  - Template Syntax:
+  - ` {{#each arrayName}}`
+  - ` {{/each}}`
+  - ` {{#if variable}}`
+  - ` {{/if}}`
+  - ` {{variable}}`
+  - ` {{#array arrayName}}`
+  - ` {{value}}`
+  - ` {{/array}}`
 - **Routing**: Client-side routing via URL parameters (`?page=admin` or `?slug=project-name`) allows for clean navigation without a server.
 
 ### 3. Security (FanHash Engine)
