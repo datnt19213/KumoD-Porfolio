@@ -35,18 +35,79 @@ body {
   z-index: -1;
 }
 
+.background::before {
+  content: "KUMOD PORTFOLIO";
+  font-size: 180px;
+  font-weight: 900;
+  font-style: italic;
+  font-family: system-ui;
+  position: fixed;
+  color: #ffffff02;
+  z-index: -1;
+  white-space: nowrap;
+  top: 10%;
+  left: 55%;
+  animation: slide 7s ease infinite;
+}
+.background::after {
+  content: "KUMOD PORTFOLIO";
+  font-size: 180px;
+  font-weight: 900;
+  font-style: italic;
+  font-family: system-ui;
+  position: fixed;
+  color: #ffffff02;
+  z-index: -1;
+  white-space: nowrap;
+  bottom: 10%;
+  left: -55%;
+  animation: -slide 10s ease infinite;
+}
+
+/* after before animation sliding 10px slowly left right infinity */
+@keyframes slide {
+  0% {
+    left: 55%;
+    transform: translateX(0px);
+  }
+  50% {
+    left: 56%;
+    transform: translateX(10px);
+  }
+  100% {
+    left: 55%;
+    transform: translateX(0px);
+  }
+}
+@keyframes -slide {
+  0% {
+    left: -55%;
+    transform: translateX(0px);
+  }
+  50% {
+    left: -56%;
+    transform: translateX(10px);
+  }
+  100% {
+    left: -55%;
+    transform: translateX(0px);
+  }
+}
+
 /* navbar */
 
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
 
   padding: 20px 40px;
 
   backdrop-filter: blur(10px);
-
-  background: rgba(255, 255, 255, 0.04);
 
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
@@ -54,6 +115,20 @@ body {
 .logo {
   font-weight: 600;
   letter-spacing: 1px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+}
+
+.logo-img {
+  width: 50px;
+  height: 50px;
+
+  object-fit: cover;
+
+  border-radius: 15px;
 }
 
 .navbar a {
@@ -272,4 +347,280 @@ body {
   .container {
     padding: 20px;
   }
+}
+
+/* =========================
+   ADMIN STYLES
+========================= */
+
+.admin-container {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 40px;
+}
+
+.admin-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 30px;
+  margin-bottom: 30px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.35)) blur(2px);
+
+  /* make the card lie on ground */
+  transform-style: preserve-3d;
+  transform-origin: center;
+  transform: rotateX(50deg) rotateZ(-30deg);
+  transition: 0.5s ease-in-out;
+}
+
+.login-card {
+  max-width: 450px;
+  margin: 100px auto;
+}
+
+.admin-card:hover,
+.admin-card:focus-within {
+  transform: rotateX(00deg) rotateZ(00deg) translateY(0px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.35)) blur(0px);
+}
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 15px;
+}
+
+.admin-grid {
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: 30px;
+}
+
+@media (max-width: 900px) {
+  .admin-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.project-admin-list {
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.admin-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  margin-bottom: 10px;
+  border: 1px solid transparent;
+  transition: 0.2s;
+}
+
+.admin-list-item:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.item-title {
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.item-slug {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.item-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-icon {
+  padding: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+  cursor: pointer;
+  border: none;
+  color: white;
+  font-size: 0.8rem;
+}
+
+.btn-icon.edit:hover {
+  background: rgba(76, 175, 80, 0.3);
+}
+.btn-icon.delete:hover {
+  background: rgba(244, 67, 54, 0.3);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: white;
+  font-family: inherit;
+  font-size: 0.875rem;
+  outline: none;
+  transition: color 0.2s ease;
+  height: 36px;
+}
+
+.form-group textarea {
+  height: 120px;
+  min-height: 120px;
+  resize: vertical;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.form-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+.checkbox label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.checkbox input {
+  width: auto;
+}
+
+.editor-wrapper {
+  margin-top: 20px;
+}
+
+#jsonEditor {
+  width: 100%;
+  height: 500px;
+  background: #1e1e1e;
+  color: #d4d4d4;
+  font-family: "Consolas", "Monaco", monospace;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 14px;
+  line-height: 1.5;
+  white-space: pre;
+}
+
+.btn.primary {
+  background: linear-gradient(135deg, #eeeeeeff, #f4f4f4ff);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #000000;
+  font-weight: 500;
+  font-size: 0.875rem;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  min-width: 120px;
+}
+
+.btn.secondary {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  font-weight: 500;
+  font-size: 0.875rem;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  min-width: 120px;
+  transition: 0.2s;
+}
+
+.btn.secondary:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.btn.ghost {
+  background: transparent;
+  border: none;
+  color: #ff4747ff;
+  font-weight: 500;
+  font-size: 0.875rem;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  min-width: 120px;
+  transition: 0.2s;
+}
+
+.btn.ghost:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.status-message {
+  padding: 12px 20px;
+  border-radius: 8px;
+  margin-bottom: 30px;
+  display: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.status-message.success {
+  background: rgba(76, 175, 80, 0.15);
+  color: #81c784;
+  border: 1px solid rgba(76, 175, 80, 0.3);
+  display: block;
+}
+
+.status-message.error {
+  background: rgba(244, 67, 54, 0.15);
+  color: #e57373;
+  border: 1px solid rgba(244, 67, 54, 0.3);
+  display: block;
 }
