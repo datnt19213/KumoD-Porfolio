@@ -1,6 +1,6 @@
 <div class="admin-container">
     {{#if !isLoggedIn}}
-    <div class="admin-card login-card">
+    <div class="admin-card login-card card-lie">
         <h2>Admin Login</h2>
         <form id="loginForm">
             <div class="form-group">
@@ -45,7 +45,7 @@
         <div id="editorCard" class="admin-card editor-card" style="display: none;">
             <div class="card-header">
                 <h3 id="editorTitle">Edit Project</h3>
-                <button id="closeEditorBtn" class="btn secondary">Close</button>
+                
             </div>
             <form id="projectForm">
                 <input type="hidden" id="editId">
@@ -66,19 +66,97 @@
                         <label>Category</label>
                         <input type="text" id="pCategory">
                     </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select class="select-status" id="pStatus">
+                            <option value="completed">Completed</option>
+                            <option value="in-progress">In Progress</option>
+                            <option value="planned">Planned</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Featured</label>
+                        <div class="checkbox-wrapper">
+                            <input type="checkbox" id="pFeatured">
+                            <label for="pFeatured">Is Featured</label>
+                        </div>
+                    </div>
                 </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Start Date</label>
+                        <input type="date" id="pStartDate">
+                    </div>
+                    <div class="form-group">
+                        <label>End Date</label>
+                        <input type="date" id="pEndDate">
+                    </div>
+                    <div class="form-group">
+                        <label>Live URL</label>
+                        <input type="text" id="pLiveUrl">
+                    </div>
+                    <div class="form-group">
+                        <label>Repo URL</label>
+                        <input type="text" id="pRepoUrl">
+                    </div>
+                </div>
+
                 <div class="form-group">
                     <label>Short Description</label>
                     <input type="text" id="pShortDesc">
                 </div>
                 <div class="form-group">
-                    <label>Full Description</label>
-                    <textarea id="pDesc"></textarea>
+                    <label>Full Description (Markdown supported)</label>
+                    <textarea id="pDesc" rows="4"></textarea>
                 </div>
-                <div class="form-group checkbox">
-                    <label><input type="checkbox" id="pFeatured"> Featured Project</label>
+
+                <div class="form-group">
+                    <label>Images (URL, one per line)</label>
+                    <textarea id="pImages" placeholder="https://example.com/img1.jpg&#10;https://example.com/img2.jpg"></textarea>
                 </div>
+
+                <div class="form-group">
+                    <label>Video URL</label>
+                    <input type="text" id="pVideo">
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Technologies (Comma separated)</label>
+                        <input type="text" id="pTechnologies" placeholder="React, Node.js, ...">
+                    </div>
+                    <div class="form-group">
+                        <label>Frameworks (Comma separated)</label>
+                        <input type="text" id="pFrameworks" placeholder="Next.js, TailwindCSS, ...">
+                    </div>
+                    <div class="form-group">
+                        <label>Tools (Comma separated)</label>
+                        <input type="text" id="pTools" placeholder="Figma, Docker, ...">
+                    </div>
+                    <div class="form-group">
+                        <label>Tags (Comma separated)</label>
+                        <input type="text" id="pTags" placeholder="Web, CMS, ...">
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Meta Title</label>
+                        <input type="text" id="pMetaTitle">
+                    </div>
+                    <div class="form-group">
+                        <label>Meta Description</label>
+                        <input type="text" id="pMetaDescription">
+                    </div>
+                    <div class="form-group">
+                        <label>OG Image</label>
+                        <input type="text" id="pOgImage">
+                    </div>
+                </div>
+
                 <div class="form-actions">
+                    <button id="closeEditorBtn" class="btn secondary">Close</button>
                     <button type="submit" class="btn primary">Save Project</button>
                 </div>
             </form>

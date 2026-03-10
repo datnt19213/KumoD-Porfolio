@@ -25,7 +25,7 @@ const NOTFOUND_URL = BASE_PATH + "notfound.html"
 
 // data
 const DATA_URL =
-    "https://gist.githubusercontent.com/datnt19213/17726f1fb5188f180f20b3f5e862bb98/raw/f8b913f48ce86abd4cadf0f89302c06e2cb5a50d/portfolio-mydev.json"
+    "https://gist.githubusercontent.com/datnt19213/17726f1fb5188f180f20b3f5e862bb98/raw/portfolio-mydev.json"
 
 
 
@@ -427,7 +427,7 @@ async function init() {
 
     }
 
-    const data = await fetchJSON(DATA_URL)
+    const data = await fetchJSON(DATA_URL + "?t=" + Date.now())
 
     let projects = []
 
@@ -599,8 +599,8 @@ async function initAdmin(projects) {
         listEl.innerHTML = projects.map((p, idx) => `
             <div class="admin-list-item">
                 <div class="item-info">
-                    <div class="item-title">${p.title}</div>
-                    <div class="item-slug">${p.slug}</div>
+                    <div class="item-title" title="${p.title}">${p.title}</div>
+                    <div class="item-slug" title="${p.slug}">${p.slug}</div>
                 </div>
                 <div class="item-actions">
                     <button class="btn-icon edit" data-idx="${idx}">✎</button>
@@ -663,11 +663,45 @@ async function initAdmin(projects) {
 
             document.getElementById("pCategory").value = p.category || ""
 
+            document.getElementById("pStatus").value = p.status || "completed"
+
+            document.getElementById("pFeatured").checked = !!p.featured
+
+
+            document.getElementById("pStartDate").value = p.startDate || ""
+
+            document.getElementById("pEndDate").value = p.endDate || ""
+
+            document.getElementById("pLiveUrl").value = p.liveUrl || ""
+
+            document.getElementById("pRepoUrl").value = p.repoUrl || ""
+
+
             document.getElementById("pShortDesc").value = p.shortDescription || ""
 
             document.getElementById("pDesc").value = p.description || ""
 
-            document.getElementById("pFeatured").checked = !!p.featured
+
+            document.getElementById("pImages").value = (p.images || []).join("\n")
+
+            document.getElementById("pVideo").value = p.video || ""
+
+
+            document.getElementById("pTechnologies").value = (p.technologies || []).join(", ")
+
+            document.getElementById("pFrameworks").value = (p.frameworks || []).join(", ")
+
+            document.getElementById("pTools").value = (p.tools || []).join(", ")
+
+            document.getElementById("pTags").value = (p.tags || []).join(", ")
+
+
+            document.getElementById("pMetaTitle").value = p.metaTitle || ""
+
+            document.getElementById("pMetaDescription").value = p.metaDescription || ""
+
+            document.getElementById("pOgImage").value = p.ogImage || ""
+
 
         } else {
 
@@ -676,6 +710,10 @@ async function initAdmin(projects) {
             form.reset()
 
             document.getElementById("editId").value = ""
+
+
+            // Set some defaults
+            document.getElementById("pStatus").value = "completed"
 
         }
 
@@ -790,14 +828,39 @@ async function initAdmin(projects) {
 
                 const idx = document.getElementById("editId").value
 
+                const splitByComma = (str) => str.split(",").map(s => s.trim()).filter(Boolean)
+
+                const splitByNewline = (str) => str.split("\n").map(s => s.trim()).filter(Boolean)
+
+
                 const p = {
                     title: document.getElementById("pTitle").value,
                     slug: document.getElementById("pSlug").value,
                     thumbnail: document.getElementById("pThumbnail").value,
                     category: document.getElementById("pCategory").value,
+                    status: document.getElementById("pStatus").value,
+                    featured: document.getElementById("pFeatured").checked,
+
+                    startDate: document.getElementById("pStartDate").value,
+                    endDate: document.getElementById("pEndDate").value,
+                    liveUrl: document.getElementById("pLiveUrl").value,
+                    repoUrl: document.getElementById("pRepoUrl").value,
+
                     shortDescription: document.getElementById("pShortDesc").value,
                     description: document.getElementById("pDesc").value,
-                    featured: document.getElementById("pFeatured").checked,
+
+                    images: splitByNewline(document.getElementById("pImages").value),
+                    video: document.getElementById("pVideo").value,
+
+                    technologies: splitByComma(document.getElementById("pTechnologies").value),
+                    frameworks: splitByComma(document.getElementById("pFrameworks").value),
+                    tools: splitByComma(document.getElementById("pTools").value),
+                    tags: splitByComma(document.getElementById("pTags").value),
+
+                    metaTitle: document.getElementById("pMetaTitle").value,
+                    metaDescription: document.getElementById("pMetaDescription").value,
+                    ogImage: document.getElementById("pOgImage").value,
+
                     updatedAt: new Date().toISOString().split("T")[0]
                 }
 

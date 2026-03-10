@@ -1,18 +1,34 @@
 <div class="container" id="projects">
 
+    <!-- My profile porttfolio -->
+    <div class="container-sm profile bg-blur">
+        <div class="img-lg">
+            <img src="https://lh3.googleusercontent.com/d/11drXx6lUAWaPxzS1qdVlSk5EvRXAZcpH" alt="Profile">
+        </div>
+        <div class="container-md">
+            <div class="card-title">Nguyễn Thành Đạt</div>
+            <div class="card-desc">Frontend Developer</div>
+        </div>
+    </div>
+
     <h2 class="section-title">Featured</h2>
 
     <div class="project-grid">
 
         {{#each featuredProjects}}
 
-        <div class="card">
+        <div class="card fade-up">
 
-            <img src="{{thumbnail}}">
+            <a class="card-link" href="?slug={{slug}}">
+
+                <img src="{{thumbnail}}">
+            </a>
 
             <div class="card-body">
 
-                <div class="card-title">{{title}}</div>
+                <div class="card-title"><a class="card-link" href="?slug={{slug}}">
+                        {{title}}
+                    </a></div>
 
                 <div class="card-desc">{{shortDescription}}</div>
 
@@ -25,8 +41,6 @@
                     {{/array}}
 
                 </div>
-
-                <a class="btn" href="?slug={{slug}}">View Project</a>
 
             </div>
 
@@ -44,13 +58,15 @@
 
         {{#each projects}}
 
-        <div class="card">
-
-            <img src="{{thumbnail}}">
-
+        <div class="card fade-up">
+            <a class="card-link" href="?slug={{slug}}">
+                <img src="{{thumbnail}}">
+            </a>
             <div class="card-body">
 
-                <div class="card-title">{{title}}</div>
+                <div class="card-title"><a class="card-link" href="?slug={{slug}}">
+                        {{title}}
+                    </a></div>
 
                 <div class="card-desc">{{shortDescription}}</div>
 
@@ -63,8 +79,6 @@
                     {{/array}}
 
                 </div>
-
-                <a class="btn" href="?slug={{slug}}">View Project</a>
 
             </div>
 
