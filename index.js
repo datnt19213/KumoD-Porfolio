@@ -14,68 +14,53 @@
  * {{/array}}
  */
 
+const BASE_PATH = "/KumoD-Porfolio/"
 
-// your template html file
-const TEMPLATE_URL = "./template.html"
+// templates
+const TEMPLATE_URL = BASE_PATH + "template.html"
+const DETAIL_TEMPLATE_URL = BASE_PATH + "detail.template.html"
+const NOTFOUND_URL = BASE_PATH + "notfound.html"
 
-// your detail template html file
-const DETAIL_TEMPLATE_URL = "./detail.template.html"
-
-// your not found html file
-const NOTFOUND_URL = "./notfound.html"
-
-// data json
+// data
 const DATA_URL =
     "https://gist.githubusercontent.com/datnt19213/17726f1fb5188f180f20b3f5e862bb98/raw/f8b913f48ce86abd4cadf0f89302c06e2cb5a50d/portfolio-mydev.json"
 
 
 
-// load template
-async function loadTemplate() {
-    const res = await fetch(TEMPLATE_URL)
+async function fetchText(url) {
+    const res = await fetch(url)
     return await res.text()
 }
 
-
-// load detail template
-async function loadDetailTemplate() {
-    const res = await fetch(DETAIL_TEMPLATE_URL)
-    return await res.text()
-}
-
-
-// load not found page
-async function loadNotFound() {
-    const res = await fetch(NOTFOUND_URL)
-    return await res.text()
-}
-
-
-// load data
-async function loadData() {
-    const res = await fetch(DATA_URL)
+async function fetchJSON(url) {
+    const res = await fetch(url)
     return await res.json()
 }
 
 
-// get query param
+
+// query param
 function getQueryParam(name) {
-    const params = new URLSearchParams(window.location.search)
+
+    const params = new URLSearchParams(location.search)
+
     return params.get(name)
+
 }
 
 
-// extract slug from url
+
+// slug from path
 function getSlugFromPath() {
 
-    const path = window.location.pathname
+    const path = location.pathname
 
-    const match = path.match(/^\/project\/([^\/]+)$/)
+    const match = path.match(/project\/([^\/]+)/)
 
-    if (match) return match[1]
+    return match ? match[1] : null
 
-    return null
 }
+
 
 
 // find project
@@ -84,10 +69,12 @@ function findProjectBySlug(data, slug) {
     if (!data.projects) return null
 
     return data.projects.find(p => p.slug === slug)
+
 }
 
 
-// render arrays
+
+// render array
 function renderArrays(template, item) {
 
     return template.replace(
@@ -98,14 +85,12 @@ function renderArrays(template, item) {
 
             if (!Array.isArray(arr)) return ""
 
-            return arr.map(v => {
-
-                return content.replace(/{{value}}/g, v)
-
-            }).join("")
+            return arr.map(v => content.replace(/{{value}}/g, v)).join("")
 
         })
+
 }
+
 
 
 // render if
@@ -117,12 +102,12 @@ function renderIf(template, item) {
 
             const value = item[key.trim()]
 
-            if (value) return content
-
-            return ""
+            return value ? content : ""
 
         })
+
 }
+
 
 
 // render variables
@@ -139,7 +124,9 @@ function renderVariables(template, item) {
             return item[key] ?? ""
 
         })
+
 }
+
 
 
 // render each
@@ -158,9 +145,7 @@ function renderEach(template, data) {
                 let block = content
 
                 block = renderArrays(block, item)
-
                 block = renderIf(block, item)
-
                 block = renderVariables(block, item)
 
                 return block
@@ -168,10 +153,12 @@ function renderEach(template, data) {
             }).join("")
 
         })
+
 }
 
 
-// render all
+
+// render
 function render(template, data) {
 
     template = renderEach(template, data)
@@ -183,6 +170,7 @@ function render(template, data) {
     template = renderVariables(template, data)
 
     return template
+
 }
 
 
@@ -190,48 +178,46 @@ function render(template, data) {
 // init
 async function init() {
 
-    const data = await loadData()
+    const app = document.getElementById("app")
 
-    // get slug from url
+    const data = await fetchJSON(DATA_URL)
+
     let slug = getSlugFromPath()
 
-    // fallback to ?slug=
     if (!slug) slug = getQueryParam("slug")
 
 
-    // DETAIL PAGE
+
     if (slug) {
 
         const project = findProjectBySlug(data, slug)
 
         if (!project) {
 
-            const notfound = await loadNotFound()
+            const html = await fetchText(NOTFOUND_URL)
 
-            document.getElementById("app").innerHTML = notfound
+            app.innerHTML = html
 
             return
         }
 
-        const template = await loadDetailTemplate()
+        const template = await fetchText(DETAIL_TEMPLATE_URL)
 
-        const html = render(template, project)
-
-        document.getElementById("app").innerHTML = html
+        app.innerHTML = render(template, project)
 
         return
+
     }
 
 
-    // LIST PAGE
-    const template = await loadTemplate()
 
-    const html = render(template, data)
+    // list page
+    const template = await fetchText(TEMPLATE_URL)
 
-    document.getElementById("app").innerHTML = html
+    app.innerHTML = render(template, data)
 
 }
 
 
-// run
+
 init()
