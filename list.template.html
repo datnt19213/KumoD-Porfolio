@@ -1,33 +1,77 @@
-<h2 class="section-title">Projects</h2>
+<div class="container" id="projects">
 
-<div class="grid">
+    <h2 class="section-title">Featured</h2>
 
-{{#each projects}}
+    <div class="project-grid">
 
-<a href="/project/{{slug}}" class="card glass">
+        {{#each featuredProjects}}
 
-<div class="card-image">
-<img src="{{thumbnail}}">
-</div>
+        <div class="card">
 
-<div class="card-body">
+            <img src="{{thumbnail}}">
 
-<h3>{{title}}</h3>
+            <div class="card-body">
 
-<p>{{shortDescription}}</p>
+                <div class="card-title">{{title}}</div>
 
-<div class="tags">
+                <div class="card-desc">{{shortDescription}}</div>
 
-{{#array technologies}}
-<span class="tag">{{value}}</span>
-{{/array}}
+                <div class="tags">
 
-</div>
+                    {{#array technologies}}
 
-</div>
+                    <span class="tag">{{value}}</span>
 
-</a>
+                    {{/array}}
 
-{{/each}}
+                </div>
+
+                <a class="btn" href="?slug={{slug}}">View Project</a>
+
+            </div>
+
+        </div>
+
+        {{/each}}
+
+    </div>
+
+
+
+    <h2 class="section-title" style="margin-top:60px">All Projects</h2>
+
+    <div class="project-grid">
+
+        {{#each projects}}
+
+        <div class="card">
+
+            <img src="{{thumbnail}}">
+
+            <div class="card-body">
+
+                <div class="card-title">{{title}}</div>
+
+                <div class="card-desc">{{shortDescription}}</div>
+
+                <div class="tags">
+
+                    {{#array technologies}}
+
+                    <span class="tag">{{value}}</span>
+
+                    {{/array}}
+
+                </div>
+
+                <a class="btn" href="?slug={{slug}}">View Project</a>
+
+            </div>
+
+        </div>
+
+        {{/each}}
+
+    </div>
 
 </div>

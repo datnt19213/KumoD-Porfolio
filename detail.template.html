@@ -1,31 +1,45 @@
-<a href="/" class="back-btn">← Back</a>
+<div class="detail">
 
-<div class="detail glass">
+    <h1>{{title}}</h1>
 
-<h1>{{title}}</h1>
+    <img class="hero" src="{{thumbnail}}">
 
-<img class="detail-thumb" src="{{thumbnail}}">
+    <p>{{description}}</p>
 
-<p class="description">{{description}}</p>
+    <h3>Technologies</h3>
 
-<h3>Technologies</h3>
+    <div class="tags">
 
-<div class="tags">
+        {{#array technologies}}
 
-{{#array technologies}}
-<span class="tag">{{value}}</span>
-{{/array}}
+        <span class="tag">{{value}}</span>
 
-</div>
+        {{/array}}
 
-<h3>Gallery</h3>
+    </div>
 
-<div class="gallery">
+    <h3 style="margin-top:30px">Gallery</h3>
 
-{{#array images}}
-<img src="{{value}}">
-{{/array}}
+    <div class="gallery">
 
-</div>
+        {{#array images}}
+
+        <img src="{{value}}">
+
+        {{/array}}
+
+    </div>
+
+    <div style="margin-top:30px">
+
+        {{#if liveUrl}}
+        <a class="btn" href="{{liveUrl}}" target="_blank">Live Demo</a>
+        {{/if}}
+
+        {{#if repoUrl}}
+        <a class="btn" href="{{repoUrl}}" target="_blank">Source Code</a>
+        {{/if}}
+
+    </div>
 
 </div>
