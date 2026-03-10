@@ -1,6 +1,5 @@
 /**
  * Template Syntax
- *
  * {{#each arrayName}}
  * {{/each}}
  *
@@ -12,6 +11,7 @@
  * {{#array arrayName}}
  * {{value}}
  * {{/array}}
+ * 
  */
 
 const BASE_PATH = "/KumoD-Porfolio/"
@@ -107,9 +107,11 @@ function getSlugFromPath() {
 
 function findProjectBySlug(data, slug) {
 
-    if (!data.projects) return null
+    const projects = Array.isArray(data) ? data : data.projects
 
-    return data.projects.find(p => p.slug === slug)
+    if (!projects) return null
+
+    return projects.find(p => p.slug === slug)
 
 }
 
@@ -249,7 +251,20 @@ async function init() {
 
     const data = await fetchJSON(DATA_URL)
 
-    if (!data.projects) {
+    let projects = []
+
+    if (Array.isArray(data)) {
+
+        projects = data
+
+    } else if (data && data.projects) {
+
+        projects = data.projects
+
+    }
+
+
+    if (!projects || projects.length === 0) {
 
         app.innerHTML = "<h2>No project data</h2>"
 
@@ -259,7 +274,7 @@ async function init() {
 
 
     // sort newest first
-    data.projects.sort((a, b) => {
+    projects.sort((a, b) => {
 
         const aDate = new Date(a.createdAt || 0)
 
@@ -268,6 +283,16 @@ async function init() {
         return bDate - aDate
 
     })
+
+
+    // Prepare data for template
+    const renderData = {
+
+        projects: projects,
+
+        featuredProjects: projects.filter(p => p.featured)
+
+    }
 
 
     let slug = getSlugFromPath()
@@ -286,7 +311,7 @@ async function init() {
 
     if (slug) {
 
-        const project = findProjectBySlug(data, slug)
+        const project = findProjectBySlug(projects, slug)
 
         if (!project) {
 
@@ -314,7 +339,7 @@ async function init() {
 
     const template = await fetchText(TEMPLATE_URL)
 
-    app.innerHTML = render(template, data)
+    app.innerHTML = render(template, renderData)
 
 }
 
