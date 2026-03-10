@@ -1,14 +1,14 @@
 /**
  * Template Syntax
- * 
+ *
  * {{#each arrayName}}
  * {{/each}}
- * 
+ *
  * {{#if variable}}
  * {{/if}}
- * 
+ *
  * {{variable}}
- * 
+ *
  * {{#array arrayName}}
  * {{value}}
  * {{/array}}
@@ -27,19 +27,58 @@ const DATA_URL =
 
 
 
+/* =========================
+   FETCH
+========================= */
+
 async function fetchText(url) {
-    const res = await fetch(url)
-    return await res.text()
+
+    try {
+
+        const res = await fetch(url)
+
+        if (!res.ok) throw new Error("Fetch failed: " + url)
+
+        return await res.text()
+
+    } catch (err) {
+
+        console.error(err)
+
+        return ""
+
+    }
+
 }
+
+
 
 async function fetchJSON(url) {
-    const res = await fetch(url)
-    return await res.json()
+
+    try {
+
+        const res = await fetch(url)
+
+        if (!res.ok) throw new Error("Fetch failed: " + url)
+
+        return await res.json()
+
+    } catch (err) {
+
+        console.error(err)
+
+        return {}
+
+    }
+
 }
 
 
 
-// query param
+/* =========================
+   URL
+========================= */
+
 function getQueryParam(name) {
 
     const params = new URLSearchParams(location.search)
@@ -50,7 +89,6 @@ function getQueryParam(name) {
 
 
 
-// slug from path
 function getSlugFromPath() {
 
     const path = location.pathname
@@ -63,7 +101,10 @@ function getSlugFromPath() {
 
 
 
-// find project
+/* =========================
+   DATA
+========================= */
+
 function findProjectBySlug(data, slug) {
 
     if (!data.projects) return null
@@ -74,7 +115,12 @@ function findProjectBySlug(data, slug) {
 
 
 
-// render array
+/* =========================
+   TEMPLATE ENGINE
+========================= */
+
+
+// render array block
 function renderArrays(template, item) {
 
     return template.replace(
@@ -85,10 +131,17 @@ function renderArrays(template, item) {
 
             if (!Array.isArray(arr)) return ""
 
-            return arr.map(v => content.replace(/{{value}}/g, v)).join("")
+            return arr.map(v => {
+
+                let block = content
+
+                block = block.replace(/{{value}}/g, v)
+
+                return block
+
+            }).join("")
 
         })
-
 }
 
 
@@ -102,15 +155,16 @@ function renderIf(template, item) {
 
             const value = item[key.trim()]
 
-            return value ? content : ""
+            if (value) return content
+
+            return ""
 
         })
-
 }
 
 
 
-// render variables
+// render variable
 function renderVariables(template, item) {
 
     return template.replace(
@@ -119,12 +173,13 @@ function renderVariables(template, item) {
 
             key = key.trim()
 
-            if (key.startsWith("#") || key.startsWith("/")) return ""
+            if (key.startsWith("#")) return ""
+
+            if (key.startsWith("/")) return ""
 
             return item[key] ?? ""
 
         })
-
 }
 
 
@@ -145,7 +200,9 @@ function renderEach(template, data) {
                 let block = content
 
                 block = renderArrays(block, item)
+
                 block = renderIf(block, item)
+
                 block = renderVariables(block, item)
 
                 return block
@@ -153,12 +210,11 @@ function renderEach(template, data) {
             }).join("")
 
         })
-
 }
 
 
 
-// render
+// main render
 function render(template, data) {
 
     template = renderEach(template, data)
@@ -175,18 +231,58 @@ function render(template, data) {
 
 
 
-// init
+/* =========================
+   INIT
+========================= */
+
 async function init() {
 
     const app = document.getElementById("app")
 
+    if (!app) {
+
+        console.error("Missing #app element")
+
+        return
+
+    }
+
     const data = await fetchJSON(DATA_URL)
+
+    if (!data.projects) {
+
+        app.innerHTML = "<h2>No project data</h2>"
+
+        return
+
+    }
+
+
+    // sort newest first
+    data.projects.sort((a, b) => {
+
+        const aDate = new Date(a.createdAt || 0)
+
+        const bDate = new Date(b.createdAt || 0)
+
+        return bDate - aDate
+
+    })
+
 
     let slug = getSlugFromPath()
 
-    if (!slug) slug = getQueryParam("slug")
+    if (!slug) {
+
+        slug = getQueryParam("slug")
+
+    }
 
 
+
+    /* =========================
+       DETAIL PAGE
+    ========================= */
 
     if (slug) {
 
@@ -196,9 +292,10 @@ async function init() {
 
             const html = await fetchText(NOTFOUND_URL)
 
-            app.innerHTML = html
+            app.innerHTML = html || "<h2>Project not found</h2>"
 
             return
+
         }
 
         const template = await fetchText(DETAIL_TEMPLATE_URL)
@@ -211,7 +308,10 @@ async function init() {
 
 
 
-    // list page
+    /* =========================
+       LIST PAGE
+    ========================= */
+
     const template = await fetchText(TEMPLATE_URL)
 
     app.innerHTML = render(template, data)
