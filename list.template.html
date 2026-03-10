@@ -1,0 +1,33 @@
+<h2 class="section-title">Projects</h2>
+
+<div class="grid">
+
+{{#each projects}}
+
+<a href="/project/{{slug}}" class="card glass">
+
+<div class="card-image">
+<img src="{{thumbnail}}">
+</div>
+
+<div class="card-body">
+
+<h3>{{title}}</h3>
+
+<p>{{shortDescription}}</p>
+
+<div class="tags">
+
+{{#array technologies}}
+<span class="tag">{{value}}</span>
+{{/array}}
+
+</div>
+
+</div>
+
+</a>
+
+{{/each}}
+
+</div>

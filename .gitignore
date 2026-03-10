@@ -1,0 +1,37 @@
+# Ignore node_modules
+node_modules/
+
+# Ignore .env files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Ignore build output
+dist/
+build/
+
+# Ignore editor files
+.vscode/
+.idea/
+
+# Ignore logs
+logs/
+*.log
+
+# Ignore temporary files
+*.tmp
+*.temp
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
+
+# Ignore other common files
+*.swp
+*.swo
+*~
+
+# Ignore any other files you don't want to track
+# Add your custom ignore patterns here

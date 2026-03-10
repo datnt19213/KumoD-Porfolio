@@ -1,0 +1,31 @@
+<a href="/" class="back-btn">← Back</a>
+
+<div class="detail glass">
+
+<h1>{{title}}</h1>
+
+<img class="detail-thumb" src="{{thumbnail}}">
+
+<p class="description">{{description}}</p>
+
+<h3>Technologies</h3>
+
+<div class="tags">
+
+{{#array technologies}}
+<span class="tag">{{value}}</span>
+{{/array}}
+
+</div>
+
+<h3>Gallery</h3>
+
+<div class="gallery">
+
+{{#array images}}
+<img src="{{value}}">
+{{/array}}
+
+</div>
+
+</div>
