@@ -1,6 +1,6 @@
 <div class="admin-container">
     {{#if !isLoggedIn}}
-    <div class="admin-card login-card card-lie">
+    <div class="admin-card login-card card-lie fade">
         <h2>Admin Login</h2>
         <form id="loginForm">
             <div class="form-group">
@@ -20,7 +20,7 @@
     {{/if}}
 
     {{#if isLoggedIn}}
-    <div class="admin-header">
+    <div class="admin-header fade-up">
         <h1>Admin Dashboard</h1>
         <div class="header-actions">
             <button id="logoutBtn" class="btn secondary">Logout</button>
@@ -31,7 +31,7 @@
 
     <div class="admin-grid">
         <!-- Project List -->
-        <div class="admin-card list-card">
+        <div class="admin-card list-card fade-right">
             <div class="card-header">
                 <h3>Projects</h3>
                 <button id="addNewBtn" class="btn primary">Add New</button>

@@ -21,6 +21,8 @@ const BASE_PATH = IS_LOCAL ? "./" : "/KumoD-Porfolio/" // CAN BE CHANGED
 const TEMPLATE_URL = BASE_PATH + "list.template.html" // CAN BE CHANGED
 const DETAIL_TEMPLATE_URL = BASE_PATH + "detail.template.html" // CAN BE CHANGED
 const ADMIN_TEMPLATE_URL = BASE_PATH + "admin.template.html" // CAN BE CHANGED
+const HEADER_TEMPLATE_URL = BASE_PATH + "header.template.html" // CAN BE CHANGED
+const FOOTER_TEMPLATE_URL = BASE_PATH + "footer.template.html" // CAN BE CHANGED
 const NOTFOUND_URL = BASE_PATH + "notfound.html" // CAN BE CHANGED
 
 // data
@@ -416,6 +418,28 @@ async function updateGist(token, content) {
 ========================= */
 
 async function init() {
+
+    const header = document.getElementById("header")
+
+    if (header) {
+
+        const headerTemplate = await fetchText(HEADER_TEMPLATE_URL)
+
+        header.innerHTML = render(headerTemplate, { BASE_PATH })
+
+    }
+
+
+    const footer = document.getElementById("footer")
+
+    if (footer) {
+
+        const footerTemplate = await fetchText(FOOTER_TEMPLATE_URL)
+
+        footer.innerHTML = render(footerTemplate, { BASE_PATH })
+
+    }
+
 
     const app = document.getElementById("app")
 
