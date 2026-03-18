@@ -10,20 +10,33 @@
 
     <link rel="stylesheet" href="index.css">
     <link rel="shortcut icon" href="https://lh3.googleusercontent.com/d/11drXx6lUAWaPxzS1qdVlSk5EvRXAZcpH" type="image/x-icon">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
 </head>
 
-<body>
+<body class="font-['Inter',sans-serif] bg-[#07090d] text-[#e2e8f0] min-h-screen antialiased selection:bg-white/10 selection:text-white overflow-x-hidden flex flex-col items-center">
 
-    <div class="background"></div>
+    <div class="background frosted-backdrop! noise! opacity-50"></div>
 
-    <header id="header" class="navbar fade-down"></header>
+    <!-- Header shell -->
+    <header id="header" class="fixed top-0 left-0 mx-auto! right-0 w-full max-w-[1280px] z-[1000] backdrop-blur-xl bg-[#07090d]/80 border-b border-white/5 h-16 flex! items-center px-6! sm:px-10! fade-down"></header>
 
-    <main id="app" class="fade-up pre-load"></main>
+    <!-- App Wrapper (Centering) -->
+    <div class="w-full max-w-[1280px] mx-auto! px-6! sm:px-10!">
+        <!-- App shell -->
+        <main id="app" class="w-full relative fade-up min-h-screen mt-16!"></main>
+    </div>
 
-    <footer id="footer" class="footer fade-up"></footer>
+    <!-- Footer Wrapper (Centering) -->
+    <div class="w-full border-t border-white/5 mt-20!">
+        <div class="w-full max-w-[1280px] mx-auto! px-6! sm:px-10!">
+            <footer id="footer" class="py-20! fade-up" style="animation-delay: 1s !important;"></footer>
+        </div>
+    </div>
 
     <script src="index.js"></script>
+    
 
 </body>
 

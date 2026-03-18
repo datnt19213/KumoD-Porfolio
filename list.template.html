@@ -1,91 +1,116 @@
-<div class="container" id="projects">
+<div class="w-full" id="projects">
 
-    <!-- My profile porttfolio -->
-    <div class="container-sm profile bg-blur">
-        <div class="img-lg">
-            <img src="https://lh3.googleusercontent.com/d/11drXx6lUAWaPxzS1qdVlSk5EvRXAZcpH" alt="Profile">
-        </div>
-        <div class="container-md">
-            <div class="card-title">Nguyễn Thành Đạt</div>
-            <div class="card-desc">Frontend Developer</div>
-        </div>
-    </div>
-
-    <h2 class="section-title">Featured</h2>
-
-    <div class="project-grid">
-
-        {{#each featuredProjects}}
-
-        <div class="card fade-up">
-
-            <a class="card-link" href="?slug={{slug}}">
-
-                <img src="{{thumbnail}}">
-            </a>
-
-            <div class="card-body">
-
-                <div class="card-title"><a class="card-link" href="?slug={{slug}}">
-                        {{title}}
-                    </a></div>
-
-                <div class="card-desc">{{shortDescription}}</div>
-
-                <div class="tags">
-
-                    {{#array technologies}}
-
-                    <span class="tag">{{value}}</span>
-
-                    {{/array}}
-
-                </div>
-
+    <!-- Hero Section -->
+    <section class="min-h-[80vh] relative grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 py-20!">
+        
+        <!-- Left Content -->
+        <div class="text-white space-y-10! flex-1 fade-right">
+            <div class="inline-flex items-center px-4! py-1!5! bg-white/5 border border-white/10 rounded-full">
+                <span class="w-1.5 h-1.5 bg-blue-500 rounded-full mr-2!"></span>
+                <span class="text-[10px] font-bold text-slate-500 tracking-[0.2em] uppercase">2026 Portfolio</span>
             </div>
-
-        </div>
-
-        {{/each}}
-
-    </div>
-
-
-
-    <h2 class="section-title" style="margin-top:60px">All Projects</h2>
-
-    <div class="project-grid">
-
-        {{#each projects}}
-
-        <div class="card fade-up">
-            <a class="card-link" href="?slug={{slug}}">
-                <img src="{{thumbnail}}">
-            </a>
-            <div class="card-body">
-
-                <div class="card-title"><a class="card-link" href="?slug={{slug}}">
-                        {{title}}
-                    </a></div>
-
-                <div class="card-desc">{{shortDescription}}</div>
-
-                <div class="tags">
-
-                    {{#array technologies}}
-
-                    <span class="tag">{{value}}</span>
-
-                    {{/array}}
-
-                </div>
-
+            
+            <div class="space-y-6!">
+                <h1 class="text-6xl sm:text-7xl lg:text-8xl font-black leading-[1] tracking-tighter text-white">
+                    Front-End <br/>
+                    <span class="text-slate-700">Developer</span>
+                </h1>
+                
+                <p class="text-xl text-slate-500 leading-relaxed max-w-lg font-light tracking-wide italic">
+                    As a Front-end Developer with over 1+ years of experience, I specialize in building high-performance, user-centric web applications using the React and Next.js ecosystems. I’m passionate about Component-driven development and have a deep interest in optimizing complex states and rendering patterns like SSR and CSR.
+                </p>
             </div>
-
+            
+            <div class="flex gap-16 py-10! border-y border-white/5">
+                <div class="space-y-1!">
+                    <p class="text-4xl font-black text-white tracking-tighter">{{projectCount}}+</p>
+                    <p class="text-[10px] font-bold text-slate-700 uppercase tracking-widest">Selected Works</p>
+                </div>
+                <div class="space-y-1!">
+                    <p class="text-4xl font-black text-white tracking-tighter">1+</p>
+                    <p class="text-[10px] font-bold text-slate-700 uppercase tracking-widest">Experience</p>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4">
+                <a href="#featured" class="col-span-2 sm:col-span-1 px-10! py-4! bg-white text-black font-bold text-xs uppercase flex items-center justify-center tracking-widest rounded-full hover:bg-slate-200 transition-all text-center">
+                    Explore Experience
+                </a>
+                <a href="mailto:datnguyen.frontend.dev@gmail.com" class="col-span-2 sm:col-span-1 px-10! py-4! bg-transparent flex items-center justify-center text-white border border-white/20 font-bold text-xs uppercase tracking-widest rounded-full hover:bg-white/5 transition-all text-center">
+                    Get in Touch
+                </a>
+                <a href="https://1drv.ms/b/c/98cb236da23cf10c/IQBC-Zzc4dn0RbPyYUM0azVtAW6TJnQRxv3Q1ixYlddoyqc?e=olxXdY" target="_blank" class="col-span-2 px-10! py-4! w-full! bg-transparent text-white border border-white/20 font-bold text-xs uppercase tracking-widest rounded-full hover:bg-white/5 transition-all text-center">
+                    My CV
+                </a>
+            </div>
+        </div>
+        
+        <!-- Right Content -->
+        <div class="hidden lg:block aspect-square relative flex-1 h-auto w-full max-w-2xl fade-left">
+           <!-- <img src="https://lh3.googleusercontent.com/d/11drXx6lUAWaPxzS1qdVlSk5EvRXAZcpH" alt="Profile" class="absolute rounded-xl! top-10 left-10 w-[100px] h-[100px] object-contain z-10"> -->
+           <img src="https://lh3.googleusercontent.com/d/11LqCjrnIt9C83YgT61BOWq-Yk-w9ktaJ" alt="Profile" class="object-cover w-full h-full">
         </div>
 
-        {{/each}}
+    </section>
+
+    <!-- Sections -->
+    <div class="pb-32 pt-20" id="featured">
+        
+        <div class="mb-20! space-y-2! uppercase tracking-[0.3em] flex flex-col items-center text-center">
+            <p class="text-[10px] font-bold text-blue-500">Curated</p>
+            <h2 class="text-4xl font-black text-white tracking-tight">Featured Projects</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+            {{#each featuredProjects}}
+            <div class="relative group bg-[#0d1117] rounded-[2.5rem] overflow-hidden border border-white/5 transition-all duration-700 hover:border-white/10 fade-up">
+                <a class="block overflow-hidden aspect-[4/3]" href="?slug={{slug}}">
+                    <img class="w-full h-full object-cover grayscale opacity-30 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-105 transition-all duration-1000" src="{{thumbnail}}">
+                </a>
+                <span class="absolute top-4 right-4 border border-white/5 uppercase rounded-full px-2! py-1! text-sm">{{status}}</span>
+                <div class="px-3! py-6! space-y-3! text-center">
+                    <div class="space-y-3!">
+                        <h3 class="text-2xl font-bold text-white tracking-tight leading-none group-hover:text-blue-400 transition-colors">
+                            <a href="?slug={{slug}}">{{title}}</a>
+                        </h3>
+                        <p class="text-sm h-16 text-slate-500 leading-relaxed line-clamp-2 font-light tracking-wide italic">{{shortDescription}}</p>
+                    </div>
+                    <div class="flex flex-wrap justify-center gap-2 pt-2">
+                        {{#array technologies}}
+                        <span class="text-[9px] font-bold py-1! px-3! bg-white/5 text-slate-700 rounded uppercase tracking-widest border border-white/5">{{value}}</span>
+                        {{/array}}
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+
+        <div class="mt-48! mb-20! space-y-4! uppercase tracking-[0.3em] flex flex-col items-center text-center border-t border-white/5 pt-20!">
+            <p class="text-[10px] font-bold text-slate-400">Selected Works</p>
+            <h2 class="text-4xl font-black text-white tracking-tight">Archive</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+            {{#each projects}}
+            <div class="group py-12! flex flex-col gap-6 fade-up hover:bg-white/[0.02] transition-all px-10! rounded-[2rem] border border-transparent hover:border-white/5">
+                <div class="flex justify-between items-start gap-10">
+                    <div class="space-y-4! flex-1">
+                        <h4 class="text-xl font-bold text-white tracking-tight leading-tight group-hover:text-blue-400 transition-colors">
+                            <a href="?slug={{slug}}">{{title}}</a>
+                        </h4>
+                        <div class="flex flex-wrap gap-2">
+                            {{#array technologies}}
+                            <span class="text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">{{value}}</span>
+                            {{/array}}
+                        </div>
+                    </div>
+                    <div class="w-20 h-20 rounded-2xl overflow-hidden border border-white/5 grayscale opacity-10 group-hover:opacity-100 group-hover:grayscale-0 transition-all duration-700">
+                         <img class="w-full h-full object-cover" src="{{thumbnail}}">
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+        </div>
 
     </div>
-
 </div>

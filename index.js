@@ -1,272 +1,101 @@
 /**
- * Template Syntax
- * {{#each arrayName}}
- * {{/each}}
- *
- * {{#if variable}}
- * {{/if}}
- *
- * {{variable}}
- *
- * {{#array arrayName}}
- * {{value}}
- * {{/array}}
- * 
+ * Template Engine & Portfolio Logic
+ * Full support for: {{#each}}, {{#if}}, {{variable}}, {{#array}}
  */
 
 const IS_LOCAL = location.hostname === "localhost" || location.hostname === "127.0.0.1";
-const BASE_PATH = IS_LOCAL ? "./" : "/KumoD-Porfolio/" // CAN BE CHANGED
+const BASE_PATH = IS_LOCAL ? "./" : "/KumoD-Porfolio/";
+const TEMPLATE_URL = BASE_PATH + "list.template.html";
+const DETAIL_TEMPLATE_URL = BASE_PATH + "detail.template.html";
+const ADMIN_TEMPLATE_URL = BASE_PATH + "admin.template.html";
+const HEADER_TEMPLATE_URL = BASE_PATH + "header.template.html";
+const FOOTER_TEMPLATE_URL = BASE_PATH + "footer.template.html";
+const NOTFOUND_URL = BASE_PATH + "notfound.html";
 
-// templates
-const TEMPLATE_URL = BASE_PATH + "list.template.html" // CAN BE CHANGED
-const DETAIL_TEMPLATE_URL = BASE_PATH + "detail.template.html" // CAN BE CHANGED
-const ADMIN_TEMPLATE_URL = BASE_PATH + "admin.template.html" // CAN BE CHANGED
-const HEADER_TEMPLATE_URL = BASE_PATH + "header.template.html" // CAN BE CHANGED
-const FOOTER_TEMPLATE_URL = BASE_PATH + "footer.template.html" // CAN BE CHANGED
-const NOTFOUND_URL = BASE_PATH + "notfound.html" // CAN BE CHANGED
-
-// data
-const DATA_URL =
-    "https://gist.githubusercontent.com/datnt19213/17726f1fb5188f180f20b3f5e862bb98/raw/portfolio-mydev.json"
-
-
+const DATA_URL = "https://gist.githubusercontent.com/datnt19213/17726f1fb5188f180f20b3f5e862bb98/raw/portfolio-mydev.json";
 
 /* =========================
-   FETCH
+   FETCH & UTILS
 ========================= */
-
 async function fetchText(url) {
-
     try {
-
-        const res = await fetch(url)
-
-        if (!res.ok) {
-
-            console.error("HTTP error! status: " + res.status + " for " + url)
-
-            throw new Error("Fetch failed: " + url)
-
-        }
-
-
-        const text = await res.text()
-
-        if (!text) console.warn("Fetch returned empty text for " + url)
-
-        return text
-
-    } catch (err) {
-
-        console.error(err)
-
-        return ""
-
-    }
-
+        const res = await fetch(url);
+        if (!res.ok) throw new Error("Fetch failed: " + url);
+        return await res.text();
+    } catch (err) { return ""; }
 }
-
-
 
 async function fetchJSON(url) {
-
     try {
-
-        const res = await fetch(url)
-
-        if (!res.ok) {
-
-            console.error("HTTP error! status: " + res.status + " for " + url)
-
-            throw new Error("Fetch failed: " + url)
-
-        }
-
-
-        return await res.json()
-
-    } catch (err) {
-
-        console.error(err)
-
-        return {}
-
-    }
-
+        const res = await fetch(url);
+        if (!res.ok) throw new Error("Fetch failed");
+        return await res.json();
+    } catch (err) { return {}; }
 }
-
-
-
-/* =========================
-   URL
-========================= */
 
 function getQueryParam(name) {
-
-    const params = new URLSearchParams(location.search)
-
-    return params.get(name)
-
+    return new URLSearchParams(location.search).get(name);
 }
-
-
 
 function getSlugFromPath() {
-
-    const path = location.pathname
-
-    const match = path.match(/project\/([^\/]+)/)
-
-    return match ? match[1] : null
-
+    const match = location.pathname.match(/project\/([^\/]+)/);
+    return match ? match[1] : null;
 }
-
-
-
-/* =========================
-   DATA
-========================= */
-
-function findProjectBySlug(data, slug) {
-
-    const projects = Array.isArray(data) ? data : data.projects
-
-    if (!projects) return null
-
-    return projects.find(p => p.slug === slug)
-
-}
-
-
 
 /* =========================
    TEMPLATE ENGINE
 ========================= */
-
-
-// render array block
 function renderArrays(template, item) {
-
-    return template.replace(
-        /{{#array (.*?)}}([\s\S]*?){{\/array}}/g,
-        (_, key, content) => {
-
-            const arr = item[key.trim()]
-
-            if (!Array.isArray(arr)) return ""
-
-            return arr.map(v => {
-
-                let block = content
-
-                block = block.replace(/{{value}}/g, v)
-
-                return block
-
-            }).join("")
-
-        })
+    return template.replace(/{{#array (.*?)}}([\s\S]*?){{\/array}}/g, (_, key, content) => {
+        const arr = item[key.trim()];
+        if (!Array.isArray(arr)) return "";
+        return arr.map(v => content.replace(/{{value}}/g, v)).join("");
+    });
 }
 
-
-
-// render if
 function renderIf(template, item) {
-
-    return template.replace(
-        /{{#if (.*?)}}([\s\S]*?){{\/if}}/g,
-        (_, key, content) => {
-
-            key = key.trim()
-
-            const isNot = key.startsWith("!")
-
-            const actualKey = isNot ? key.slice(1).trim() : key
-
-            const value = item[actualKey]
-
-
-            const result = isNot ? !value : !!value
-
-
-            return result ? content : ""
-
-        })
+    return template.replace(/{{#if (.*?)}}([\s\S]*?){{\/if}}/g, (_, key, content) => {
+        key = key.trim();
+        const isNot = key.startsWith("!");
+        const actualKey = isNot ? key.slice(1).trim() : key;
+        const value = item[actualKey];
+        return (isNot ? !value : !!value) ? content : "";
+    });
 }
 
-
-
-// render variable
 function renderVariables(template, item) {
-
-    return template.replace(
-        /{{(.*?)}}/g,
-        (_, key) => {
-
-            key = key.trim()
-
-            if (key.startsWith("#")) return ""
-
-            if (key.startsWith("/")) return ""
-
-            return item[key] ?? ""
-
-        })
+    return template.replace(/{{(.*?)}}/g, (_, key) => {
+        key = key.trim();
+        if (key.startsWith("#") || key.startsWith("/")) return "";
+        return item[key] ?? "";
+    });
 }
 
-
-
-// render each
 function renderEach(template, data) {
-
-    return template.replace(
-        /{{#each (.*?)}}([\s\S]*?){{\/each}}/g,
-        (_, arrayName, content) => {
-
-            const arr = data[arrayName.trim()]
-
-            if (!Array.isArray(arr)) return ""
-
-            return arr.map(item => {
-
-                let block = content
-
-                block = renderArrays(block, item)
-
-                block = renderIf(block, item)
-
-                block = renderVariables(block, item)
-
-                return block
-
-            }).join("")
-
-        })
+    return template.replace(/{{#each (.*?)}}([\s\S]*?){{\/each}}/g, (_, arrayName, content) => {
+        const arr = data[arrayName.trim()];
+        if (!Array.isArray(arr)) return "";
+        return arr.map(item => {
+            let block = content;
+            block = renderArrays(block, item);
+            block = renderIf(block, item);
+            block = renderVariables(block, item);
+            return block;
+        }).join("");
+    });
 }
-// main render
+
 function render(template, data) {
-
-    template = renderEach(template, data)
-
-    template = renderArrays(template, data)
-
-    template = renderIf(template, data)
-
-    template = renderVariables(template, data)
-
-    return template
-
+    let res = renderEach(template, data);
+    res = renderArrays(res, data);
+    res = renderIf(res, data);
+    res = renderVariables(res, data);
+    return res;
 }
-
-
 
 /* =========================
-   CRYPTO
+   CRYPTO (FanHash)
 ========================= */
-
-/**
- * INTERNAL PURE SHA-256 HELPER
- */
 function _sha256Internal(ascii) {
     const rightRotate = (v, a) => (v >>> a) | (v << (32 - a));
     const mathPow = Math.pow;
@@ -315,8 +144,6 @@ function _sha256Internal(ascii) {
     return result;
 }
 
-
-
 class FanHashEngine {
     static encode(text, password) {
         const data = new TextEncoder().encode(text);
@@ -332,7 +159,6 @@ class FanHashEngine {
         }
         return Array.from(data).map(b => b.toString(16).padStart(2, '0')).join('');
     }
-
     static decode(hex, password) {
         try {
             const data = new Uint8Array(hex.match(/.{1,2}/g).map(b => parseInt(b, 16)));
@@ -347,578 +173,240 @@ class FanHashEngine {
                 }
             }
             return new TextDecoder().decode(data);
-        } catch (e) {
-            return null;
-        }
+        } catch (e) { return null; }
     }
 }
 
-
-
 /* =========================
-   GIST API
+   CORE STATE & GIST
 ========================= */
+let projects = [];
+let session = { isLoggedIn: false, token: "", password: "", hashedToken: "" };
 
 async function updateGist(token, content) {
-
-    try {
-
-        // 1. Get Gist to find the filename
-        const gistIdMatch = DATA_URL.match(/\/([a-f0-9]+)\/raw\//)
-
-        if (!gistIdMatch) throw new Error("Could not extract Gist ID from URL")
-
-        const gistId = gistIdMatch[1]
-
-
-        const getRes = await fetch(`https://api.github.com/gists/${gistId}`, {
-            headers: { 'Authorization': `token ${token}` }
-        })
-
-        if (!getRes.ok) throw new Error("Failed to fetch Gist info")
-
-        const gistData = await getRes.json()
-
-        const filename = Object.keys(gistData.files)[0]
-
-
-        // 2. Update Gist
-        const updateRes = await fetch(`https://api.github.com/gists/${gistId}`, {
-            method: 'PATCH',
-            headers: {
-                'Authorization': `token ${token}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                files: {
-                    [filename]: { content }
-                }
-            })
-        })
-
-
-        if (!updateRes.ok) throw new Error("Update failed: " + updateRes.statusText)
-
-        return true
-
-    } catch (err) {
-
-        console.error(err)
-
-        throw err
-
-    }
-
+    const gistIdMatch = DATA_URL.match(/\/([a-f0-9]+)\/raw\//);
+    const gistId = gistIdMatch[1];
+    const getRes = await fetch(`https://api.github.com/gists/${gistId}`, { headers: { 'Authorization': `token ${token}` } });
+    const gistData = await getRes.json();
+    const filename = Object.keys(gistData.files)[0];
+    const updateRes = await fetch(`https://api.github.com/gists/${gistId}`, {
+        method: 'PATCH',
+        headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ files: { [filename]: { content } } })
+    });
+    if (!updateRes.ok) throw new Error("Update failed");
+    return true;
 }
-
-
 
 /* =========================
-   INIT
+   RENDER LOGIC
 ========================= */
-
 async function init() {
+    // Header & Footer
+    const [hT, fT] = await Promise.all([fetchText(HEADER_TEMPLATE_URL), fetchText(FOOTER_TEMPLATE_URL)]);
+    const headerEl = document.getElementById("header");
+    const footerEl = document.getElementById("footer");
+    if (headerEl) headerEl.innerHTML = render(hT, { BASE_PATH });
+    if (footerEl) footerEl.innerHTML = render(fT, { BASE_PATH });
 
-    const header = document.getElementById("header")
+    const app = document.getElementById("app");
+    const data = await fetchJSON(DATA_URL + "?t=" + Date.now());
+    projects = Array.isArray(data) ? data : (data.projects || []);
 
-    if (header) {
+    // Sort newest first
+    projects.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
 
-        const headerTemplate = await fetchText(HEADER_TEMPLATE_URL)
-
-        header.innerHTML = render(headerTemplate, { BASE_PATH })
-
-    }
-
-
-    const footer = document.getElementById("footer")
-
-    if (footer) {
-
-        const footerTemplate = await fetchText(FOOTER_TEMPLATE_URL)
-
-        footer.innerHTML = render(footerTemplate, { BASE_PATH })
-
-    }
-
-
-    const app = document.getElementById("app")
-
-    if (!app) {
-
-        console.error("Missing #app element")
-
-        return
-
-    }
-
-    const data = await fetchJSON(DATA_URL + "?t=" + Date.now())
-
-    let projects = []
-
-    if (Array.isArray(data)) {
-
-        projects = data
-
-    } else if (data && data.projects) {
-
-        projects = data.projects
-
-    }
-
-
-    if (!projects || projects.length === 0) {
-
-        app.innerHTML = "<h2 style='width: 100%; text-align: center;'>No project data</h2>"
-
-        return
-
-    }
-
-
-    // sort newest first
-    projects.sort((a, b) => {
-
-        const aDate = new Date(a.createdAt || 0)
-
-        const bDate = new Date(b.createdAt || 0)
-
-        return bDate - aDate
-
-    })
-
-
-    // Prepare data for template
-    const renderData = {
-
-        projects: projects,
-
-        featuredProjects: projects.filter(p => p.featured)
-
-    }
-
-
-    let slug = getSlugFromPath()
-
-    if (!slug) {
-
-        slug = getQueryParam("slug")
-
-    }
-
-
-    const page = getQueryParam("page")
-
-    console.log("PMSE: Route detected:", page || "home")
-
-
-    /* =========================
-       ADMIN PAGE
-    ========================= */
+    const page = getQueryParam("page");
+    const slug = getSlugFromPath() || getQueryParam("slug");
 
     if (page === "admin") {
-
-        await initAdmin(projects)
-
-        return
-
+        await initAdmin();
+    } else if (slug) {
+        const p = projects.find(x => x.slug === slug);
+        if (!p) app.innerHTML = (await fetchText(NOTFOUND_URL)) || "Project not found";
+        else app.innerHTML = render(await fetchText(DETAIL_TEMPLATE_URL), p);
+    } else {
+        const template = await fetchText(TEMPLATE_URL);
+        app.innerHTML = render(template, { projects, featuredProjects: projects.filter(p => p.featured), projectCount: projects.length });
     }
-
-
-
-    /* =========================
-       DETAIL PAGE
-    ========================= */
-
-    if (slug) {
-
-        const project = findProjectBySlug(projects, slug)
-
-        if (!project) {
-
-            const html = await fetchText(NOTFOUND_URL)
-
-            app.innerHTML = html || "<h2>Project not found</h2>"
-
-            return
-
-        }
-
-        const template = await fetchText(DETAIL_TEMPLATE_URL)
-
-        app.innerHTML = render(template, project)
-
-        return
-
-    }
-
-
-
-    /* =========================
-       LIST PAGE
-    ========================= */
-
-    const template = await fetchText(TEMPLATE_URL)
-
-    app.innerHTML = render(template, renderData)
-
 }
 
+async function initAdmin() {
+    session.password = localStorage.getItem("admin_pass") || "";
+    session.hashedToken = localStorage.getItem("admin_token") || "";
 
-
-async function initAdmin(projects) {
-
-    const app = document.getElementById("app")
-
-    const template = await fetchText(ADMIN_TEMPLATE_URL)
-
-
-    const session = {
-        isLoggedIn: false,
-        token: "",
-        password: localStorage.getItem("admin_pass") || "",
-        hashedToken: localStorage.getItem("admin_token") || ""
-    }
-
-
-    // Auto-login
     if (session.password && session.hashedToken) {
-
-        const token = FanHashEngine.decode(session.hashedToken, session.password)
-
-        if (token && token.startsWith("ghp_")) {
-
-            session.isLoggedIn = true
-
-            session.token = token
-
+        const tk = FanHashEngine.decode(session.hashedToken, session.password);
+        if (tk?.startsWith("ghp_")) {
+            session.token = tk;
+            session.isLoggedIn = true;
         }
-
     }
-
-
-    function showStatus(msg, isError = false) {
-
-        const el = document.getElementById("statusMessage")
-
-        if (!el) return
-
-        el.innerText = msg
-
-        el.className = "status-message " + (isError ? "error" : "success")
-
-        el.style.display = "block"
-
-        setTimeout(() => el.style.display = "none", 5000)
-
-    }
-
-
-    function renderList() {
-
-        const listEl = document.getElementById("projectAdminList")
-
-        if (!listEl) return
-
-
-        listEl.innerHTML = projects.map((p, idx) => `
-            <div class="admin-list-item">
-                <div class="item-info">
-                    <div class="item-title" title="${p.title}">${p.title}</div>
-                    <div class="item-slug" title="${p.slug}">${p.slug}</div>
-                </div>
-                <div class="item-actions">
-                    <button class="btn-icon edit" data-idx="${idx}">✎</button>
-                    <button class="btn-icon delete" data-idx="${idx}">🗑</button>
-                </div>
-            </div>
-        `).join("")
-
-
-        listEl.querySelectorAll(".edit").forEach(btn => {
-
-            btn.onclick = () => openEditor(btn.dataset.idx)
-
-        })
-
-
-        listEl.querySelectorAll(".delete").forEach(btn => {
-
-            btn.onclick = () => {
-
-                if (confirm("Delete this project?")) {
-
-                    projects.splice(btn.dataset.idx, 1)
-
-                    saveAndRefresh()
-
-                }
-
-            }
-
-        })
-
-    }
-
-
-    function openEditor(idx = null) {
-
-        const editor = document.getElementById("editorCard")
-
-        const form = document.getElementById("projectForm")
-
-        const title = document.getElementById("editorTitle")
-
-        editor.style.display = "block"
-
-
-        if (idx !== null) {
-
-            const p = projects[idx]
-
-            title.innerText = "Edit Project"
-
-            document.getElementById("editId").value = idx
-
-            document.getElementById("pTitle").value = p.title || ""
-
-            document.getElementById("pSlug").value = p.slug || ""
-
-            document.getElementById("pThumbnail").value = p.thumbnail || ""
-
-            document.getElementById("pCategory").value = p.category || ""
-
-            document.getElementById("pStatus").value = p.status || "completed"
-
-            document.getElementById("pFeatured").checked = !!p.featured
-
-
-            document.getElementById("pStartDate").value = p.startDate || ""
-
-            document.getElementById("pEndDate").value = p.endDate || ""
-
-            document.getElementById("pLiveUrl").value = p.liveUrl || ""
-
-            document.getElementById("pRepoUrl").value = p.repoUrl || ""
-
-
-            document.getElementById("pShortDesc").value = p.shortDescription || ""
-
-            document.getElementById("pDesc").value = p.description || ""
-
-
-            document.getElementById("pImages").value = (p.images || []).join("\n")
-
-            document.getElementById("pVideo").value = p.video || ""
-
-
-            document.getElementById("pTechnologies").value = (p.technologies || []).join(", ")
-
-            document.getElementById("pFrameworks").value = (p.frameworks || []).join(", ")
-
-            document.getElementById("pTools").value = (p.tools || []).join(", ")
-
-            document.getElementById("pTags").value = (p.tags || []).join(", ")
-
-
-            document.getElementById("pMetaTitle").value = p.metaTitle || ""
-
-            document.getElementById("pMetaDescription").value = p.metaDescription || ""
-
-            document.getElementById("pOgImage").value = p.ogImage || ""
-
-
-        } else {
-
-            title.innerText = "Add New Project"
-
-            form.reset()
-
-            document.getElementById("editId").value = ""
-
-
-            // Set some defaults
-            document.getElementById("pStatus").value = "completed"
-
-        }
-
-    }
-
-
-    async function saveAndRefresh() {
-
-        try {
-
-            await updateGist(session.token, JSON.stringify(projects, null, 2))
-
-            showStatus("Changes saved to Gist!")
-
-            renderList()
-
-        } catch (err) {
-
-            showStatus("Failed to save: " + err.message, true)
-
-        }
-
-    }
-
-
-    async function renderAdmin() {
-
-        app.innerHTML = render(template, session)
-
-
-        if (!session.isLoggedIn) {
-
-            const form = document.getElementById("loginForm")
-
-            const clearBtn = document.getElementById("clearSessionBtn")
-
-
-            if (clearBtn) {
-
-                clearBtn.onclick = () => {
-
-                    localStorage.removeItem("admin_pass")
-
-                    localStorage.removeItem("admin_token")
-
-                    location.reload()
-
-                }
-
-            }
-
-
-            form.onsubmit = async (e) => {
-
-                e.preventDefault()
-
-                const tokenInput = form.githubToken.value
-
-                const passInput = form.password.value
-
-
-                if (tokenInput.startsWith("ghp_")) {
-
-                    const hashed = FanHashEngine.encode(tokenInput, passInput)
-
-                    session.isLoggedIn = true
-
-                    session.token = tokenInput
-
-                    localStorage.setItem("admin_pass", passInput)
-
-                    localStorage.setItem("admin_token", hashed)
-
-                    renderAdmin()
-
-                } else {
-
-                    alert("Invalid GitHub Token (must start with ghp_)")
-
-                }
-
-            }
-
-        } else {
-
-            renderList()
-
-
-            document.getElementById("addNewBtn").onclick = () => openEditor()
-
-            document.getElementById("closeEditorBtn").onclick = () => {
-
-                document.getElementById("editorCard").style.display = "none"
-
-            }
-
-
-            document.getElementById("logoutBtn").onclick = () => {
-
-                session.isLoggedIn = false
-
-                session.token = ""
-
-                renderAdmin()
-
-            }
-
-
-            document.getElementById("projectForm").onsubmit = (e) => {
-
-                e.preventDefault()
-
-                const idx = document.getElementById("editId").value
-
-                const splitByComma = (str) => str.split(",").map(s => s.trim()).filter(Boolean)
-
-                const splitByNewline = (str) => str.split("\n").map(s => s.trim()).filter(Boolean)
-
-
-                const p = {
-                    title: document.getElementById("pTitle").value,
-                    slug: document.getElementById("pSlug").value,
-                    thumbnail: document.getElementById("pThumbnail").value,
-                    category: document.getElementById("pCategory").value,
-                    status: document.getElementById("pStatus").value,
-                    featured: document.getElementById("pFeatured").checked,
-
-                    startDate: document.getElementById("pStartDate").value,
-                    endDate: document.getElementById("pEndDate").value,
-                    liveUrl: document.getElementById("pLiveUrl").value,
-                    repoUrl: document.getElementById("pRepoUrl").value,
-
-                    shortDescription: document.getElementById("pShortDesc").value,
-                    description: document.getElementById("pDesc").value,
-
-                    images: splitByNewline(document.getElementById("pImages").value),
-                    video: document.getElementById("pVideo").value,
-
-                    technologies: splitByComma(document.getElementById("pTechnologies").value),
-                    frameworks: splitByComma(document.getElementById("pFrameworks").value),
-                    tools: splitByComma(document.getElementById("pTools").value),
-                    tags: splitByComma(document.getElementById("pTags").value),
-
-                    metaTitle: document.getElementById("pMetaTitle").value,
-                    metaDescription: document.getElementById("pMetaDescription").value,
-                    ogImage: document.getElementById("pOgImage").value,
-
-                    updatedAt: new Date().toISOString().split("T")[0]
-                }
-
-
-                if (idx !== "") {
-
-                    projects[idx] = { ...projects[idx], ...p }
-
-                } else {
-
-                    p.id = Date.now().toString()
-
-                    p.createdAt = p.updatedAt
-
-                    projects.unshift(p)
-
-                }
-
-
-                document.getElementById("editorCard").style.display = "none"
-
-                saveAndRefresh()
-
-            }
-
-        }
-
-    }
-
-
-    renderAdmin()
-
+    renderAdminPage();
 }
 
+async function renderAdminPage() {
+    const app = document.getElementById("app");
+    const template = await fetchText(ADMIN_TEMPLATE_URL);
+    app.innerHTML = render(template, session);
 
+    attachAdminEvents();
+    if (session.isLoggedIn) renderList();
+}
 
-init()
+function renderList() {
+    const listEl = document.getElementById("projectAdminList");
+    if (!listEl) return;
+    if (projects.length === 0) {
+        listEl.innerHTML = `<div class="p-8 text-center text-slate-500 uppercase tracking-widest text-[10px]">No projects found</div>`;
+        return;
+    }
+    listEl.innerHTML = projects.map((p, idx) => `
+        <div class="group flex justify-between items-center p-4! bg-white/[0.02] rounded-xl border border-white/5 transition-all duration-300 hover:bg-white/[0.04] hover:border-white/10 gap-4">
+            <div class="flex-1 min-w-0">
+                <div class="text-[11px] font-bold text-white uppercase tracking-wider truncate">${p.title}</div>
+                <div class="text-[9px] text-slate-600 uppercase tracking-widest mt-0.5! truncate">${p.slug}</div>
+            </div>
+            <div class="flex gap-2">
+                <button class="w-8 h-8 flex items-center justify-center bg-white/5 rounded-lg border border-white/5 text-slate-600 hover:bg-white hover:text-black transition-all edit" data-idx="${idx}">✎</button>
+                <button class="w-8 h-8 flex items-center justify-center bg-white/5 rounded-lg border border-white/5 text-slate-600 hover:bg-red-500/20 hover:text-red-400 transition-all delete" data-idx="${idx}">🗑</button>
+            </div>
+        </div>
+    `).join("");
+
+    listEl.querySelectorAll(".edit").forEach(b => b.onclick = () => openEditor(b.dataset.idx));
+    listEl.querySelectorAll(".delete").forEach(b => b.onclick = () => {
+        if (confirm("Delete?")) { projects.splice(b.dataset.idx, 1); saveAndRefresh(); }
+    });
+}
+
+function attachAdminEvents() {
+    const showStatus = (msg, isErr) => {
+        const el = document.getElementById("statusMessage");
+        if (!el) return;
+        el.innerText = msg;
+        el.style.display = "block";
+        el.className = `fixed bottom-10! left-1/2 -translate-x-1/2 z-[2000] py-3! px-8! rounded-full border text-[10px] font-bold uppercase tracking-widest ${isErr ? "bg-black border-red-500 text-red-500" : "bg-black border-white/20 text-white"}`;
+        setTimeout(() => el.style.display = "none", 3000);
+    };
+
+    // Form Login
+    const loginForm = document.getElementById("loginForm");
+    if (loginForm) {
+        loginForm.onsubmit = (e) => {
+            e.preventDefault();
+            const tk = loginForm.githubToken.value;
+            const pw = loginForm.password.value;
+            if (tk.startsWith("ghp_")) {
+                session.token = tk; session.password = pw; session.isLoggedIn = true;
+                session.hashedToken = FanHashEngine.encode(tk, pw);
+                localStorage.setItem("admin_pass", pw);
+                localStorage.setItem("admin_token", session.hashedToken);
+                renderAdminPage();
+            }
+        };
+    }
+
+    // Buttons
+    const logoutBtn = document.getElementById("logoutBtn");
+    if (logoutBtn) logoutBtn.onclick = () => { session.isLoggedIn = false; renderAdminPage(); };
+
+    const clearBtn = document.getElementById("clearSessionBtn");
+    if (clearBtn) clearBtn.onclick = () => { localStorage.clear(); location.reload(); };
+
+    const addNewBtn = document.getElementById("addNewBtn");
+    if (addNewBtn) addNewBtn.onclick = () => openEditor();
+
+    const closeBtn = document.getElementById("closeEditorBtn");
+    if (closeBtn) closeBtn.onclick = () => document.getElementById("editorCard").style.display = "none";
+
+    // Project Form (SAVE) - FULL FIELDS
+    const projectForm = document.getElementById("projectForm");
+    if (projectForm) {
+        projectForm.onsubmit = async (e) => {
+            e.preventDefault();
+            const idx = document.getElementById("editId").value;
+            const comma = (s) => s.split(",").map(x => x.trim()).filter(Boolean);
+            const nl = (s) => s.split("\n").map(x => x.trim()).filter(Boolean);
+
+            const p = {
+                title: document.getElementById("pTitle").value,
+                slug: document.getElementById("pSlug").value,
+                thumbnail: document.getElementById("pThumbnail").value,
+                category: document.getElementById("pCategory").value,
+                status: document.getElementById("pStatus").value,
+                featured: document.getElementById("pFeatured").checked ? true : false,
+                startDate: document.getElementById("pStartDate").value,
+                endDate: document.getElementById("pEndDate").value,
+                liveUrl: document.getElementById("pLiveUrl").value,
+                repoUrl: document.getElementById("pRepoUrl").value,
+                shortDescription: document.getElementById("pShortDesc").value,
+                description: document.getElementById("pDesc").value,
+                video: document.getElementById("pVideo").value,
+                metaTitle: document.getElementById("pMetaTitle").value,
+                metaDescription: document.getElementById("pMetaDescription").value,
+                ogImage: document.getElementById("pOgImage").value,
+                technologies: comma(document.getElementById("pTechnologies").value),
+                frameworks: comma(document.getElementById("pFrameworks").value),
+                tools: comma(document.getElementById("pTools").value),
+                tags: comma(document.getElementById("pTags").value),
+                images: nl(document.getElementById("pImages").value),
+                updatedAt: new Date().toISOString().split("T")[0]
+            };
+
+            if (idx !== "") projects[idx] = { ...projects[idx], ...p };
+            else { p.createdAt = p.updatedAt; p.id = Date.now().toString(); projects.unshift(p); }
+
+            document.getElementById("editorCard").style.display = "none";
+            try {
+                await updateGist(session.token, JSON.stringify(projects, null, 2));
+                showStatus("Saved successfully!");
+                renderList();
+            } catch (err) { showStatus("Error: " + err.message, true); }
+        };
+    }
+}
+
+function openEditor(idx = null) {
+    const editor = document.getElementById("editorCard");
+    const form = document.getElementById("projectForm");
+    editor.style.display = "block";
+    form.reset();
+    document.getElementById("editId").value = "";
+    document.getElementById("editorTitle").innerText = idx !== null ? "Edit Project" : "Add New Project";
+
+    if (idx !== null) {
+        const p = projects[idx];
+        document.getElementById("editId").value = idx;
+        document.getElementById("pTitle").value = p.title || "";
+        document.getElementById("pSlug").value = p.slug || "";
+        document.getElementById("pThumbnail").value = p.thumbnail || "";
+        document.getElementById("pCategory").value = p.category || "";
+        document.getElementById("pStatus").value = p.status || "completed";
+        document.getElementById("pFeatured").checked = !!p.featured;
+        document.getElementById("pStartDate").value = p.startDate || "";
+        document.getElementById("pEndDate").value = p.endDate || "";
+        document.getElementById("pLiveUrl").value = p.liveUrl || "";
+        document.getElementById("pRepoUrl").value = p.repoUrl || "";
+        document.getElementById("pShortDesc").value = p.shortDescription || "";
+        document.getElementById("pDesc").value = p.description || "";
+        document.getElementById("pVideo").value = p.video || "";
+        document.getElementById("pMetaTitle").value = p.metaTitle || "";
+        document.getElementById("pMetaDescription").value = p.metaDescription || "";
+        document.getElementById("pOgImage").value = p.ogImage || "";
+        document.getElementById("pTechnologies").value = (p.technologies || []).join(", ");
+        document.getElementById("pFrameworks").value = (p.frameworks || []).join(", ");
+        document.getElementById("pTools").value = (p.tools || []).join(", ");
+        document.getElementById("pTags").value = (p.tags || []).join(", ");
+        document.getElementById("pImages").value = (p.images || []).join("\n");
+    }
+}
+
+async function saveAndRefresh() {
+    try {
+        await updateGist(session.token, JSON.stringify(projects, null, 2));
+        renderList();
+    } catch (err) { alert("Failed to save"); }
+}
+
+init();

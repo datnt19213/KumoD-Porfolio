@@ -24,7 +24,12 @@ Your portfolio data is stored as a JSON file in a **GitHub Gist**.
 - **Fetch**: The frontend uses `fetch()` with a cache-buster (`?t=timestamp`) to retrieve the latest version of `data.json`.
 - **Update**: The Admin panel uses the GitHub REST API to `PATCH` the Gist with updated project data.
 
-### 2. The Engine
+### 2. Styling (Tailwind CSS v4)
+
+- **Tailwind CSS v4** is loaded via CDN (`@tailwindcss/browser@4`) for utility-first styling across all templates.
+- **Custom CSS** (`index.css`) is kept minimal — only for animations (fade/slide keyframes), background watermark pseudo-elements, and the admin 3D card effect that cannot be expressed as Tailwind utilities.
+
+### 3. The Engine
 
 - **Template System**: A lightweight regex-based engine handles rendering. It supports `{{variable}}`, `{{#each}}` for arrays, and `{{#if}}` for conditional logic.
 

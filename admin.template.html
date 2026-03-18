@@ -1,165 +1,186 @@
-<div class="admin-container">
+<div class="max-w-7xl mx-auto! pt-[100px] px-6! sm:px-10! pb-20 w-full min-h-screen">
     {{#if !isLoggedIn}}
-    <div class="admin-card login-card card-lie fade">
-        <h2>Admin Login</h2>
-        <form id="loginForm">
-            <div class="form-group">
-                <label>Token</label>
-                <input type="password" id="githubToken" placeholder="Your token" required>
-            </div>
-            <div class="form-group">
-                <label>Password</label>
-                <input type="password" id="password" placeholder="Password" required>
-            </div>
-            <div class="form-actions">
-                <button type="button" class="btn ghost" id="clearSessionBtn">Clear Session</button>
-                <button type="submit" class="btn primary">Login</button>
-            </div>
-        </form>
+    <div class="max-w-[400px] mx-auto! mt-20! fade-up">
+        <div class="bg-[#0d1117] border border-white/5 rounded-2xl p-10! shadow-2xl">
+            <h2 class="text-xl font-bold mb-8! text-white tracking-tight text-center">Admin Access</h2>
+            <form id="loginForm" class="space-y-6!">
+                <div class="space-y-2!">
+                    <label class="block text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">GitHub Token</label>
+                    <input class="w-full py-3! px-4! bg-white/5 border border-white/10 rounded-xl text-white text-sm outline-none transition-all duration-300 focus:border-white/20 focus:bg-white/[0.08]" type="password" id="githubToken" placeholder="••••••••••••" required>
+                </div>
+                <div class="space-y-2!">
+                    <label class="block text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">Security Key</label>
+                    <input class="w-full py-3! px-4! bg-white/5 border border-white/10 rounded-xl text-white text-sm outline-none transition-all duration-300 focus:border-white/20 focus:bg-white/[0.08]" type="password" id="password" placeholder="••••••••" required>
+                </div>
+                <div class="grid grid-cols-1 gap-4 pt-4">
+                    <button type="submit" class="w-full py-3.5! bg-white text-black font-bold text-xs uppercase tracking-widest rounded-xl hover:bg-slate-200 transition-all">Authenticate</button>
+                    <button type="button" class="w-full py-3! px-4! bg-transparent text-slate-500 font-bold text-[10px] uppercase tracking-widest hover:text-red-400 transition-all" id="clearSessionBtn">Reset Session</button>
+                </div>
+            </form>
+        </div>
     </div>
     {{/if}}
 
     {{#if isLoggedIn}}
-    <div class="admin-header fade-up">
-        <h1>Admin Dashboard</h1>
-        <div class="header-actions">
-            <button id="logoutBtn" class="btn secondary">Logout</button>
-        </div>
-    </div>
-
-    <div id="statusMessage" class="status-message"></div>
-
-    <div class="admin-grid">
-        <!-- Project List -->
-        <div class="admin-card list-card fade-right">
-            <div class="card-header">
-                <h3>Projects</h3>
-                <button id="addNewBtn" class="btn primary">Add New</button>
+    <div class="space-y-12! fade-up">
+        <div class="flex justify-between items-end pt-8! border-b border-white/5 pb-8!">
+            <div class="space-y-1!">
+                <p class="text-[10px] font-bold uppercase tracking-[0.3em] text-blue-500">Management</p>
+                <h1 class="text-3xl font-bold text-white tracking-tight">Dashboard</h1>
             </div>
-            <div id="projectAdminList" class="project-admin-list">
-                <!-- Projects rendered here -->
-            </div>
+            <button id="logoutBtn" class="text-[10px] font-bold uppercase tracking-widest text-slate-500 hover:text-white transition-all">Sign Out</button>
         </div>
 
-        <!-- Project Editor Form -->
-        <div id="editorCard" class="admin-card editor-card" style="display: none;">
-            <div class="card-header">
-                <h3 id="editorTitle">Edit Project</h3>
-                
+        <div id="statusMessage"></div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-[400px_1fr] gap-12 items-start">
+            <!-- Project List -->
+            <div class="bg-[#0d1117] border border-white/5 rounded-2xl overflow-hidden fade-right shadow-xl">
+                <div class="p-6! border-b border-white/5 flex justify-between items-center bg-white/[0.02]">
+                    <h3 class="text-xs font-bold uppercase tracking-widest text-white">Project List</h3>
+                    <button id="addNewBtn" class="py-2! px-4! bg-white text-black text-[10px] font-bold uppercase tracking-widest rounded transition-all hover:bg-slate-200">New</button>
+                </div>
+                <div id="projectAdminList" class="p-4! space-y-2! max-h-[70vh] overflow-y-auto custom-scrollbar">
+                    <!-- Projects rendered here -->
+                </div>
             </div>
-            <form id="projectForm">
-                <input type="hidden" id="editId">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Title</label>
-                        <input type="text" id="pTitle" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Slug</label>
-                        <input type="text" id="pSlug" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Thumbnail URL</label>
-                        <input type="text" id="pThumbnail">
-                    </div>
-                    <div class="form-group">
-                        <label>Category</label>
-                        <input type="text" id="pCategory">
-                    </div>
-                    <div class="form-group">
-                        <label>Status</label>
-                        <select class="select-status" id="pStatus">
-                            <option value="completed">Completed</option>
-                            <option value="in-progress">In Progress</option>
-                            <option value="planned">Planned</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Featured</label>
-                        <div class="checkbox-wrapper">
-                            <input type="checkbox" id="pFeatured">
-                            <label for="pFeatured">Is Featured</label>
+
+            <!-- Project Editor Form -->
+            <div id="editorCard" class="bg-[#0d1117] border border-white/5 rounded-2xl p-8! fade-left shadow-xl" style="display: none;">
+                <div class="mb-10! pb-6 border-b border-white/5">
+                    <h3 id="editorTitle" class="text-xl pb-4! font-bold text-white tracking-tight">Editor</h3>
+                </div>
+                <form id="projectForm" class="space-y-8!">
+                    <input type="hidden" id="editId">
+                    
+                    <div class="space-y-6!">
+                        <p class="text-[10px] font-bold text-blue-500 uppercase tracking-widest border-l-2 border-blue-500 pl-3!">Basic Information</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-2!">
+                                <label class="block text-[10px] font-bold uppercase tracking-widest text-slate-500">Title</label>
+                                <input class="w-full py-3! px-4! bg-white/5 border border-white/10 rounded-xl text-white text-sm outline-none transition-all focus:border-white/20" type="text" id="pTitle" placeholder="Project Name" required>
+                            </div>
+                            <div class="space-y-2!">
+                                <label class="block text-[10px] font-bold uppercase tracking-widest text-slate-500">Slug</label>
+                                <input class="w-full py-3! px-4! bg-white/5 border border-white/10 rounded-xl text-white text-sm outline-none transition-all focus:border-white/20" type="text" id="pSlug" placeholder="project-slug" required>
+                            </div>
+                            <div class="space-y-2!">
+                                <label class="block text-[10px] font-bold uppercase tracking-widest text-slate-500">Category</label>
+                                <input class="w-full py-3! px-4! bg-white/5 border border-white/10 rounded-xl text-white text-sm outline-none transition-all focus:border-white/20" type="text" id="pCategory" placeholder="Web App, UI/UX...">
+                            </div>
+                            <div class="space-y-2!">
+                                <label class="block text-[10px] font-bold uppercase tracking-widest text-slate-500">Status</label>
+                                <select class="w-full h-11 px-4! bg-[#161b22] border border-white/10 rounded-xl text-white text-sm outline-none appearance-none transition-all focus:border-white/20" id="pStatus">
+                                    <option value="completed">Completed</option>
+                                    <option value="in-progress">In Progress</option>
+                                    <option value="planned">Planned</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="space-y-2!">
+                            <!-- <label class="block text-[10px] font-bold uppercase tracking-widest text-slate-500"> Is Featured</label> -->
+                            <div class="flex items-center gap-4 block text-[10px] font-bold uppercase tracking-widest text-slate-500">
+                                Is Featured?
+                                <input type="checkbox" id="pFeatured" placeholder="Project Name" required></div>
                         </div>
                     </div>
-                </div>
 
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Start Date</label>
-                        <input type="date" id="pStartDate">
+                    <div class="space-y-6!">
+                        <p class="text-[10px] font-bold text-blue-500 uppercase tracking-widest border-l-2 border-blue-500 pl-3!">Links & Timeline</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-2!">
+                                <label class="block text-[10px] font-bold uppercase tracking-widest text-slate-500">Live URL</label>
+                                <input class="w-full py-3! px-4! bg-white/5 border border-white/10 rounded-xl text-white text-sm outline-none transition-all focus:border-white/20" type="text" id="pLiveUrl" placeholder="https://...">
+                            </div>
+                            <div class="space-y-2!">
+                                <label class="block text-[10px] font-bold uppercase tracking-widest text-slate-500">Repo URL</label>
+                                <input class="w-full py-3! px-4! bg-white/5 border border-white/10 rounded-xl text-white text-sm outline-none transition-all focus:border-white/20" type="text" id="pRepoUrl" placeholder="https://github.com/...">
+                            </div>
+                            <div class="space-y-2!">
+                                <label class="block text-[10px] font-bold uppercase tracking-widest text-slate-500">Start Date</label>
+                                <input class="w-full py-3! px-4! bg-white/5 border border-white/10 rounded-xl text-white text-sm outline-none transition-all focus:border-white/20" type="date" id="pStartDate">
+                            </div>
+                            <div class="space-y-2!">
+                                <label class="block text-[10px] font-bold uppercase tracking-widest text-slate-500">End Date</label>
+                                <input class="w-full py-3! px-4! bg-white/5 border border-white/10 rounded-xl text-white text-sm outline-none transition-all focus:border-white/20" type="date" id="pEndDate">
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>End Date</label>
-                        <input type="date" id="pEndDate">
-                    </div>
-                    <div class="form-group">
-                        <label>Live URL</label>
-                        <input type="text" id="pLiveUrl">
-                    </div>
-                    <div class="form-group">
-                        <label>Repo URL</label>
-                        <input type="text" id="pRepoUrl">
-                    </div>
-                </div>
 
-                <div class="form-group">
-                    <label>Short Description</label>
-                    <input type="text" id="pShortDesc">
-                </div>
-                <div class="form-group">
-                    <label>Full Description (Markdown supported)</label>
-                    <textarea id="pDesc" rows="4"></textarea>
-                </div>
+                    <div class="space-y-6!">
+                        <p class="text-[10px] font-bold text-blue-500 uppercase tracking-widest border-l-2 border-blue-500 pl-3!">Tech Stack</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-2!">
+                                <label class="block text-[10px] font-bold uppercase tracking-widest text-slate-500">Technologies (comma separated)</label>
+                                <input class="w-full py-3! px-4! bg-white/5 border border-white/10 rounded-xl text-white text-sm outline-none transition-all focus:border-white/20" type="text" id="pTechnologies" placeholder="React, Node.js, TS">
+                            </div>
+                            <div class="space-y-2!">
+                                <label class="block text-[10px] font-bold uppercase tracking-widest text-slate-500">Frameworks</label>
+                                <input class="w-full py-3! px-4! bg-white/5 border border-white/10 rounded-xl text-white text-sm outline-none transition-all focus:border-white/20" type="text" id="pFrameworks" placeholder="Next.js, Tailwind">
+                            </div>
+                            <div class="space-y-2!">
+                                <label class="block text-[10px] font-bold uppercase tracking-widest text-slate-500">Tools</label>
+                                <input class="w-full py-3! px-4! bg-white/5 border border-white/10 rounded-xl text-white text-sm outline-none transition-all focus:border-white/20" type="text" id="pTools" placeholder="Figma, Docker">
+                            </div>
+                            <div class="space-y-2!">
+                                <label class="block text-[10px] font-bold uppercase tracking-widest text-slate-500">Tags</label>
+                                <input class="w-full py-3! px-4! bg-white/5 border border-white/10 rounded-xl text-white text-sm outline-none transition-all focus:border-white/20" type="text" id="pTags" placeholder="E-commerce, Portfolio">
+                            </div>
+                        </div>
+                    </div>
 
-                <div class="form-group">
-                    <label>Images (URL, one per line)</label>
-                    <textarea id="pImages" placeholder="https://example.com/img1.jpg&#10;https://example.com/img2.jpg"></textarea>
-                </div>
+                    <div class="space-y-6!">
+                        <p class="text-[10px] font-bold text-blue-500 uppercase tracking-widest border-l-2 border-blue-500 pl-3!">Content & Media</p>
+                        <div class="space-y-6!">
+                            <div class="space-y-2!">
+                                <label class="block text-[10px] font-bold uppercase tracking-widest text-slate-500">Short Description</label>
+                                <input class="w-full py-3! px-4! bg-white/5 border border-white/10 rounded-xl text-white text-sm outline-none transition-all focus:border-white/20" type="text" id="pShortDesc">
+                            </div>
+                            <div class="space-y-2!">
+                                <label class="block text-[10px] font-bold uppercase tracking-widest text-slate-500">Full Description</label>
+                                <textarea class="w-full max-h-[300px] py-4! px-4! bg-white/5 border border-white/10 rounded-xl text-white text-sm outline-none transition-all focus:border-white/20 min-h-[120px]" id="pDesc"></textarea>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="space-y-2!">
+                                    <label class="block text-[10px] font-bold uppercase tracking-widest text-slate-500">Thumbnail Image URL</label>
+                                    <input class="w-full py-3! px-4! bg-white/5 border border-white/10 rounded-xl text-white text-sm outline-none transition-all focus:border-white/20" type="text" id="pThumbnail">
+                                </div>
+                                <div class="space-y-2!">
+                                    <label class="block text-[10px] font-bold uppercase tracking-widest text-slate-500">Video Promo URL</label>
+                                    <input class="w-full py-3! px-4! bg-white/5 border border-white/10 rounded-xl text-white text-sm outline-none transition-all focus:border-white/20" type="text" id="pVideo">
+                                </div>
+                            </div>
+                            <div class="space-y-2!">
+                                <label class="block text-[10px] font-bold uppercase tracking-widest text-slate-500">Gallery Images (one per line)</label>
+                                <textarea class="w-full max-h-[300px] py-4! px-4! bg-white/5 border border-white/10 rounded-xl text-white text-sm outline-none transition-all focus:border-white/20 min-h-[100px]" id="pImages" placeholder="https://image1.jpg&#10;https://image2.jpg"></textarea>
+                            </div>
+                        </div>
+                    </div>
 
-                <div class="form-group">
-                    <label>Video URL</label>
-                    <input type="text" id="pVideo">
-                </div>
+                    <div class="space-y-6!">
+                        <p class="text-[10px] font-bold text-blue-500 uppercase tracking-widest border-l-2 border-blue-500 pl-3!">SEO / Meta Data</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-2!">
+                                <label class="block text-[10px] font-bold uppercase tracking-widest text-slate-500">Meta Title</label>
+                                <input class="w-full py-3! px-4! bg-white/5 border border-white/10 rounded-xl text-white text-sm outline-none transition-all focus:border-white/20" type="text" id="pMetaTitle">
+                            </div>
+                            <div class="space-y-2!">
+                                <label class="block text-[10px] font-bold uppercase tracking-widest text-slate-500">OG Image URL</label>
+                                <input class="w-full py-3! px-4! bg-white/5 border border-white/10 rounded-xl text-white text-sm outline-none transition-all focus:border-white/20" type="text" id="pOgImage">
+                            </div>
+                            <div class="md:col-span-2 space-y-2!">
+                                <label class="block text-[10px] font-bold uppercase tracking-widest text-slate-500">Meta Description</label>
+                                <textarea class="w-full max-h-[300px] py-3! px-4! bg-white/5 border border-white/10 rounded-xl text-white text-sm outline-none transition-all focus:border-white/20 min-h-[80px]" id="pMetaDescription"></textarea>
+                            </div>
+                        </div>
+                    </div>
 
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Technologies (Comma separated)</label>
-                        <input type="text" id="pTechnologies" placeholder="React, Node.js, ...">
+                    <div class="grid grid-cols-2 gap-4 pt-6">
+                        <button id="closeEditorBtn" type="button" class="py-3.5! bg-white/5 text-white border border-white/10 text-xs font-bold uppercase tracking-widest rounded-xl hover:bg-white/10 transition-all">Cancel</button>
+                        <button type="submit" class="py-3.5! bg-white text-black text-xs font-bold uppercase tracking-widest rounded-xl hover:bg-slate-200 transition-all">Save Project</button>
                     </div>
-                    <div class="form-group">
-                        <label>Frameworks (Comma separated)</label>
-                        <input type="text" id="pFrameworks" placeholder="Next.js, TailwindCSS, ...">
-                    </div>
-                    <div class="form-group">
-                        <label>Tools (Comma separated)</label>
-                        <input type="text" id="pTools" placeholder="Figma, Docker, ...">
-                    </div>
-                    <div class="form-group">
-                        <label>Tags (Comma separated)</label>
-                        <input type="text" id="pTags" placeholder="Web, CMS, ...">
-                    </div>
-                </div>
-
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Meta Title</label>
-                        <input type="text" id="pMetaTitle">
-                    </div>
-                    <div class="form-group">
-                        <label>Meta Description</label>
-                        <input type="text" id="pMetaDescription">
-                    </div>
-                    <div class="form-group">
-                        <label>OG Image</label>
-                        <input type="text" id="pOgImage">
-                    </div>
-                </div>
-
-                <div class="form-actions">
-                    <button id="closeEditorBtn" class="btn secondary">Close</button>
-                    <button type="submit" class="btn primary">Save Project</button>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
     {{/if}}
