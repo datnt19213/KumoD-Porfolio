@@ -191,7 +191,7 @@ async function updateGist(token, content) {
     const filename = Object.keys(gistData.files)[0];
     const updateRes = await fetch(`https://api.github.com/gists/${gistId}`, {
         method: 'PATCH',
-        headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
+        headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github.v3+json' },
         body: JSON.stringify({ files: { [filename]: { content } } })
     });
     if (!updateRes.ok) throw new Error("Update failed");
