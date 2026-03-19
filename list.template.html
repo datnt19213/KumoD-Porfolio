@@ -47,8 +47,8 @@
         
         <!-- Right Content -->
         <div class="hidden lg:block aspect-square relative flex-1 h-auto w-full max-w-2xl fade-left">
-           <!-- <img src="https://lh3.googleusercontent.com/d/11drXx6lUAWaPxzS1qdVlSk5EvRXAZcpH" alt="Profile" class="absolute rounded-xl! top-10 left-10 w-[100px] h-[100px] object-contain z-10"> -->
-           <img src="https://lh3.googleusercontent.com/d/11LqCjrnIt9C83YgT61BOWq-Yk-w9ktaJ" alt="Profile" class="object-cover w-full h-full">
+           <!-- <img loading="lazy" src="https://lh3.googleusercontent.com/d/11drXx6lUAWaPxzS1qdVlSk5EvRXAZcpH" alt="Profile" class="absolute rounded-xl! top-10 left-10 w-[100px] h-[100px] object-contain z-10"> -->
+           <img loading="lazy" src="https://lh3.googleusercontent.com/d/11LqCjrnIt9C83YgT61BOWq-Yk-w9ktaJ" alt="Profile" class="object-cover w-full h-full">
         </div>
 
     </section>
@@ -65,7 +65,7 @@
             {{#each featuredProjects}}
             <div class="relative group bg-[#0d1117] rounded-[2.5rem] overflow-hidden border border-white/5 transition-all duration-700 hover:border-white/10 fade-up">
                 <a class="block overflow-hidden aspect-[4/3]" href="?slug={{slug}}">
-                    <img class="w-full h-full object-cover grayscale opacity-30 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-105 transition-all duration-1000" src="{{thumbnail}}">
+                    <img loading="lazy" class="w-full h-full object-cover grayscale opacity-30 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-105 transition-all duration-1000" src="{{thumbnail}}">
                 </a>
                 <span class="absolute top-4 right-4 border border-white/5 uppercase rounded-full px-2! py-1! text-sm">{{status}}</span>
                 <div class="px-3! py-6! space-y-3! text-center">
@@ -105,7 +105,7 @@
                         </div>
                     </div>
                     <div class="w-20 h-20 rounded-2xl overflow-hidden border border-white/5 grayscale opacity-10 group-hover:opacity-100 group-hover:grayscale-0 transition-all duration-700">
-                         <img class="w-full h-full object-cover" src="{{thumbnail}}">
+                         <img loading="lazy" class="w-full h-full object-cover" src="{{thumbnail}}">
                     </div>
                 </div>
             </div>

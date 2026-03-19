@@ -3,30 +3,34 @@
         href="{{BASE_PATH}}">
         <div
             class="w-8 h-8 rounded-lg overflow-hidden border border-white/10 group-hover:border-white/20 transition-all duration-300 grayscale group-hover:grayscale-0">
-            <img class="w-full h-full object-cover"
-                src="https://lh3.googleusercontent.com/d/11drXx6lUAWaPxzS1qdVlSk5EvRXAZcpH" alt="Logo">
+            <img loading="lazy" class="w-full h-full object-cover"
+                src="https://lh3.googleusercontent.com/d/11drXx6lUAWaPxzS1qdVlSk5EvRXAZcpH" loading="lazy" alt="Logo">
         </div>
         <span
             class="text-[10px] font-bold tracking-[0.2em] uppercase text-slate-400 group-hover:text-white transition-colors">KumoD
             - Nguyen Thanh Dat (Daniel Nguyen)</span>
     </a>
 
-        <div class="flex items-center gap-4">
-            <a href="https://github.com/datnt19213" target="_blank"
-                class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500 hover:text-white transition-all duration-300 flex items-center gap-2">
-                <!-- <img width="24" height="24" src="https://img.icons8.com/?size=100&id=106562&format=png&color=ffffff"
+    <img loading="lazy" id="hamburger-menu" src="https://img.icons8.com/?size=100&id=120374&format=png&color=ffffff"
+        alt="hamburger menu" class="w-5 h-5 opacity-50 fade cursor-pointer lg:hidden block" onclick="toggleMenu()">
+    <img loading="lazy" id="close-menu" src="https://img.icons8.com/?size=100&id=99996&format=png&color=ffffff" alt="hamburger menu"
+        class="w-5 h-5 opacity-50 cursor-pointer hidden fade cursor-pointer" onclick="closeMenu()">
+    <div id="nav-menu" class="hidden absolute lg:relative top-16 z-10 lg:top-0 lg:z-0 left-0 w-full lg:w-fit h-fit lg:h-full bg-black px-4! lg:px-0! pt-4! lg:pt-0! lg:relative lg:flex flex-col lg:flex-row items-center gap-4 fade-left">
+        <a href="https://github.com/datnt19213" target="_blank"
+            class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500 hover:text-white transition-all duration-300 flex items-center gap-2">
+            <!-- <img loading="lazy" width="24" height="24" src="https://img.icons8.com/?size=100&id=106562&format=png&color=ffffff"
                     alt="github" class="w-5 h-5 opacity-50" /> -->
-                GitHub</a>
-            <a href="https://www.linkedin.com/in/datnguyen-fe-dev/" target="_blank"
-                class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500 hover:text-white transition-all duration-300 flex items-center gap-2">
-                <!-- <img width="24" height="24" src="https://img.icons8.com/?size=100&id=98960&format=png&color=ffffff"
+            GitHub</a>
+        <a href="https://www.linkedin.com/in/datnguyen-fe-dev/" target="_blank"
+            class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500 hover:text-white transition-all duration-300 flex items-center gap-2">
+            <!-- <img loading="lazy" width="24" height="24" src="https://img.icons8.com/?size=100&id=98960&format=png&color=ffffff"
                     alt="linkedin" class="w-5 h-5 opacity-50" /> -->
-                LinkedIn</a>
-        </div>
-        <div class="flex items-center gap-2">
-            <a href="{{BASE_PATH}}#featured"
-                class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500 hover:text-white transition-all duration-300">Experience</a>
-            <a href="mailto:datnguyen.frontend.dev@gmail.com"
-                class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500 hover:text-white transition-all duration-300">Contact</a>
-        </div>
+            LinkedIn</a>
+    </div>
+    <div id="nav-menu-2" class="hidden absolute lg:relative top-32 z-10 lg:top-0 lg:z-0 border-b border-white/10 lg:border-0 pt-4! p-4! lg:p-0! lg:pb-0! left-0 w-full lg:w-fit h-fit lg:h-full bg-black lg:relative lg:flex flex-col lg:flex-row items-center gap-4 fade-left">
+        <a href="{{BASE_PATH}}#featured"
+            class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500 hover:text-white transition-all duration-300">Experience</a>
+        <a href="mailto:datnguyen.frontend.dev@gmail.com"
+            class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500 hover:text-white transition-all duration-300">Contact</a>
+    </div>
 </div>

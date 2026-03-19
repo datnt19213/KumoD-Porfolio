@@ -410,3 +410,24 @@ async function saveAndRefresh() {
 }
 
 init();
+
+
+// event listener interaction
+
+// hamburger menu
+
+function toggleMenu() {
+    document.getElementById("nav-menu").style.display = "flex";
+    document.getElementById("nav-menu-2").style.display = "flex";
+    document.getElementById("hamburger-menu").style.display = "none";
+    document.getElementById("close-menu").style.display = "block";
+    console.log("hamburger-menu clicked");
+}
+
+function closeMenu() {
+    document.getElementById("nav-menu").style.display = "none";
+    document.getElementById("nav-menu-2").style.display = "none";
+    document.getElementById("hamburger-menu").style.display = "block";
+    document.getElementById("close-menu").style.display = "none";
+    console.log("close-menu clicked");
+}
